@@ -1,44 +1,3406 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Mi sitio de noticias</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="JusticiaBot — Asistente legal para resolver casos de consumidor: multas, reembolsos, depositos, demandas, deudas, vuelos, privacidad y mas. Genera documentos legales gratis." />
+  <meta name="theme-color" content="#0f172a" />
+  <title>JusticiaBot — Pelea tus casos legales</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>" />
+  <style>
+/* ============================================================
+   JusticiaBot — Hoja de estilos principal
+   Tema: Navy + Oro. Sin dependencias.
+   ============================================================ */
+:root {
+  --navy-900: #0b1220;
+  --navy-800: #0f172a;
+  --navy-700: #1e293b;
+  --navy-600: #334155;
+  --slate-500: #64748b;
+  --slate-400: #94a3b8;
+  --slate-300: #cbd5e1;
+  --slate-200: #e2e8f0;
+  --slate-100: #f1f5f9;
+  --paper: #f8fafc;
+  --white: #ffffff;
+  --gold: #d4af37;
+  --gold-soft: #f3e7c0;
+  --brand: #2563eb;
+  --brand-dark: #1d4ed8;
+  --green: #16a34a;
+  --green-soft: #dcfce7;
+  --amber: #d97706;
+  --amber-soft: #fef3c7;
+  --red: #dc2626;
+  --red-soft: #fee2e2;
+  --blue-soft: #dbeafe;
+  --radius: 14px;
+  --radius-sm: 9px;
+  --shadow: 0 10px 30px -12px rgba(15, 23, 42, 0.25);
+  --shadow-lg: 0 24px 60px -20px rgba(15, 23, 42, 0.35);
+  --ring: 0 0 0 3px rgba(37, 99, 235, 0.35);
+  --maxw: 1120px;
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --serif: "Iowan Old Style", "Palatino Linotype", Georgia, "Times New Roman", serif;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--navy-800);
+  background: var(--paper);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4 { line-height: 1.2; margin: 0 0 .5em; color: var(--navy-900); }
+h1 { font-size: clamp(1.9rem, 4vw, 3rem); letter-spacing: -.02em; }
+h2 { font-size: clamp(1.4rem, 2.6vw, 2rem); letter-spacing: -.01em; }
+h3 { font-size: 1.2rem; }
+p { margin: 0 0 1rem; }
+a { color: var(--brand); text-decoration: none; }
+a:hover { text-decoration: underline; }
+img { max-width: 100%; display: block; }
+.muted { color: var(--slate-500); }
+.container { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 20px; }
+
+.skip-link {
+  position: absolute; left: -999px; top: 0; background: var(--navy-900); color: #fff;
+  padding: 10px 16px; z-index: 200; border-radius: 0 0 8px 0;
+}
+.skip-link:focus { left: 0; }
+
+:focus-visible { outline: none; box-shadow: var(--ring); border-radius: 6px; }
+
+/* ---------- Header ---------- */
+.site-header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(11, 18, 32, .9);
+  backdrop-filter: saturate(140%) blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.header-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; color: #fff; font-weight: 800; font-size: 1.25rem; }
+.brand:hover { text-decoration: none; }
+.brand-mark { font-size: 1.4rem; }
+.brand-name span { color: var(--gold); }
+.brand.small { font-size: 1.1rem; }
+.brand.small .brand-mark { font-size: 1.2rem; }
+
+.primary-nav { display: flex; align-items: center; gap: 6px; }
+.primary-nav a {
+  color: var(--slate-300); padding: 8px 12px; border-radius: 8px; font-weight: 600; font-size: .95rem;
+}
+.primary-nav a:hover { color: #fff; background: rgba(255,255,255,.08); text-decoration: none; }
+.primary-nav a.active { color: #fff; background: rgba(37,99,235,.35); }
+
+.lang-switch { display: inline-flex; margin-left: 8px; background: rgba(255,255,255,.08); border-radius: 8px; padding: 3px; }
+.lang-btn { border: 0; background: transparent; color: var(--slate-300); font-weight: 700; padding: 5px 10px; border-radius: 6px; cursor: pointer; }
+.lang-btn.active { background: var(--gold); color: var(--navy-900); }
+
+.nav-toggle { display: none; flex-direction: column; gap: 5px; background: transparent; border: 0; cursor: pointer; padding: 8px; }
+.nav-toggle span { width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: .25s; }
+.nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-weight: 700; font-size: .98rem; padding: 12px 20px; border-radius: 10px;
+  border: 1px solid transparent; cursor: pointer; transition: .18s; text-decoration: none; white-space: nowrap;
+}
+.btn:hover { text-decoration: none; transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+.btn-primary { background: var(--brand); color: #fff; box-shadow: 0 8px 20px -10px var(--brand); }
+.btn-primary:hover { background: var(--brand-dark); }
+.btn-gold { background: var(--gold); color: var(--navy-900); }
+.btn-gold:hover { background: #c8a32f; }
+.btn-ghost { background: transparent; color: var(--navy-800); border-color: var(--slate-300); }
+.btn-ghost:hover { background: var(--slate-100); }
+.btn-light { background: #fff; color: var(--navy-900); }
+.btn-sm { padding: 8px 14px; font-size: .9rem; border-radius: 9px; }
+.btn-block { width: 100%; }
+.btn[disabled] { opacity: .5; cursor: not-allowed; transform: none; }
+
+/* ---------- Hero ---------- */
+.hero {
+  background:
+    radial-gradient(1200px 500px at 80% -10%, rgba(37,99,235,.35), transparent 60%),
+    radial-gradient(900px 500px at 0% 0%, rgba(212,175,55,.18), transparent 55%),
+    linear-gradient(180deg, var(--navy-900), var(--navy-800));
+  color: #fff; padding: 64px 0 72px;
+}
+.hero .container { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; }
+.hero h1 { color: #fff; }
+.hero p.lead { color: var(--slate-300); font-size: 1.15rem; max-width: 48ch; }
+.hero .eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  font-size: .75rem; color: var(--gold); background: rgba(212,175,55,.12); border: 1px solid rgba(212,175,55,.3);
+  padding: 6px 12px; border-radius: 999px; margin-bottom: 18px;
+}
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 26px; }
+.hero-stats { display: flex; gap: 28px; margin-top: 34px; flex-wrap: wrap; }
+.hero-stats .num { font-size: 1.6rem; font-weight: 800; color: #fff; }
+.hero-stats .lbl { color: var(--slate-400); font-size: .85rem; }
+
+.hero-card {
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 18px;
+  padding: 22px; box-shadow: var(--shadow-lg);
+}
+.hero-search { display: flex; gap: 8px; }
+.hero-search input {
+  flex: 1; padding: 14px 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.95); font-size: 1rem; color: var(--navy-900);
+}
+.hero-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.chip {
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14); color: var(--slate-200);
+  padding: 7px 12px; border-radius: 999px; font-size: .85rem; cursor: pointer; transition: .15s;
+}
+.chip:hover { background: rgba(255,255,255,.16); color: #fff; }
+
+/* ---------- Sections ---------- */
+.section { padding: 56px 0; }
+.section.alt { background: var(--white); border-top: 1px solid var(--slate-200); border-bottom: 1px solid var(--slate-200); }
+.section-head { text-align: center; max-width: 60ch; margin: 0 auto 36px; }
+.section-head p { color: var(--slate-500); font-size: 1.05rem; }
+
+/* ---------- Category grid ---------- */
+.cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 18px; }
+.cat-card {
+  background: #fff; border: 1px solid var(--slate-200); border-radius: var(--radius); padding: 20px;
+  display: flex; flex-direction: column; gap: 8px; transition: .18s; cursor: pointer; text-align: left;
+}
+.cat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: var(--brand); text-decoration: none; }
+.cat-icon { font-size: 1.8rem; width: 52px; height: 52px; display: grid; place-items: center; background: var(--blue-soft); border-radius: 12px; }
+.cat-card h3 { margin: 6px 0 0; font-size: 1.08rem; }
+.cat-card p { font-size: .9rem; color: var(--slate-500); margin: 0; }
+.cat-card .tag { margin-top: auto; font-size: .78rem; font-weight: 700; color: var(--brand); }
+
+/* ---------- Feature steps ---------- */
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.step { background: #fff; border: 1px solid var(--slate-200); border-radius: var(--radius); padding: 24px; }
+.step .n { width: 38px; height: 38px; border-radius: 10px; background: var(--navy-900); color: var(--gold); font-weight: 800; display: grid; place-items: center; margin-bottom: 12px; }
+
+/* ---------- Cases list page ---------- */
+.page-head { background: linear-gradient(180deg, var(--navy-800), var(--navy-700)); color: #fff; padding: 40px 0; }
+.page-head h1 { color: #fff; margin-bottom: 6px; }
+.page-head p { color: var(--slate-300); margin: 0; }
+
+.toolbar { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin: 26px 0; }
+.toolbar input[type="search"] {
+  flex: 1; min-width: 220px; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--slate-300); background: #fff; font-size: 1rem;
+}
+.filter-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+.pill {
+  border: 1px solid var(--slate-300); background: #fff; color: var(--navy-700); padding: 8px 14px;
+  border-radius: 999px; font-weight: 600; font-size: .88rem; cursor: pointer; transition: .15s;
+}
+.pill:hover { border-color: var(--brand); color: var(--brand); }
+.pill.active { background: var(--navy-900); color: #fff; border-color: var(--navy-900); }
+
+.case-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
+.case-card {
+  background: #fff; border: 1px solid var(--slate-200); border-radius: var(--radius); padding: 20px; display: flex; flex-direction: column; gap: 10px; transition: .18s;
+}
+.case-card:hover { box-shadow: var(--shadow); border-color: var(--brand); }
+.case-card .top { display: flex; align-items: center; gap: 12px; }
+.case-card .ci { font-size: 1.5rem; width: 46px; height: 46px; display: grid; place-items: center; border-radius: 11px; background: var(--slate-100); }
+.case-card h3 { margin: 0; font-size: 1.05rem; }
+.case-card .desc { font-size: .9rem; color: var(--slate-500); margin: 0; flex: 1; }
+.badge { display: inline-block; font-size: .72rem; font-weight: 700; padding: 3px 9px; border-radius: 999px; letter-spacing: .02em; }
+.badge.cat { background: var(--blue-soft); color: var(--brand-dark); }
+.badge.juris { background: var(--gold-soft); color: #7a5c00; }
+
+/* ---------- Wizard ---------- */
+.wizard-wrap { display: grid; grid-template-columns: 1fr 380px; gap: 28px; align-items: start; }
+.card { background: #fff; border: 1px solid var(--slate-200); border-radius: var(--radius); padding: 26px; box-shadow: var(--shadow); }
+.card.pad-lg { padding: 30px; }
+.progress { height: 8px; background: var(--slate-200); border-radius: 999px; overflow: hidden; margin-bottom: 22px; }
+.progress > i { display: block; height: 100%; background: linear-gradient(90deg, var(--brand), var(--gold)); transition: width .3s; }
+.step-label { font-size: .82rem; font-weight: 700; color: var(--brand); text-transform: uppercase; letter-spacing: .06em; }
+
+.field { margin-bottom: 18px; }
+.field label { display: block; font-weight: 600; margin-bottom: 6px; font-size: .95rem; }
+.field .hint { font-size: .82rem; color: var(--slate-500); margin: -2px 0 8px; }
+.field input, .field textarea, .field select {
+  width: 100%; padding: 12px 14px; border: 1px solid var(--slate-300); border-radius: 10px; font: inherit; background: #fff; color: var(--navy-800);
+}
+.field textarea { min-height: 110px; resize: vertical; }
+.field input:focus, .field textarea:focus, .field select:focus { border-color: var(--brand); box-shadow: var(--ring); outline: none; }
+.field.req label::after { content: " *"; color: var(--red); }
+.field .err { color: var(--red); font-size: .82rem; margin-top: 5px; display: none; }
+.field.invalid input, .field.invalid textarea, .field.invalid select { border-color: var(--red); }
+.field.invalid .err { display: block; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+.wizard-actions { display: flex; justify-content: space-between; gap: 12px; margin-top: 8px; }
+
+.sidebar-note { background: var(--blue-soft); border: 1px solid #bfdbfe; border-radius: var(--radius); padding: 18px; }
+.sidebar-note h4 { margin-top: 0; }
+.sidebar-note ul { margin: 0; padding-left: 18px; font-size: .9rem; color: var(--navy-700); }
+.sidebar-note li { margin-bottom: 6px; }
+
+.juris-note { background: var(--amber-soft); border: 1px solid #fde68a; color: #7c4a03; padding: 12px 14px; border-radius: 10px; font-size: .9rem; margin-bottom: 18px; }
+
+/* ---------- Document preview ---------- */
+.doc-wrap { display: grid; grid-template-columns: 1fr 300px; gap: 24px; align-items: start; }
+.doc-paper {
+  background: #fff; border: 1px solid var(--slate-200); border-radius: 8px; box-shadow: var(--shadow);
+  padding: 56px 60px; font-family: var(--serif); font-size: 1.02rem; color: #1a1a1a; line-height: 1.7;
+  white-space: pre-wrap; word-wrap: break-word; min-height: 400px;
+}
+.doc-actions { display: flex; flex-direction: column; gap: 10px; position: sticky; top: 84px; }
+.doc-actions .card { padding: 18px; box-shadow: none; }
+
+/* ---------- Dashboard ---------- */
+.stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 26px; }
+.stat { background: #fff; border: 1px solid var(--slate-200); border-radius: var(--radius); padding: 18px; }
+.stat .v { font-size: 1.8rem; font-weight: 800; }
+.stat .l { color: var(--slate-500); font-size: .85rem; }
+.stat.draft .v { color: var(--slate-600); }
+.stat.sent .v { color: var(--brand); }
+.stat.progress-s .v { color: var(--amber); }
+.stat.resolved .v { color: var(--green); }
+
+.case-row {
+  background: #fff; border: 1px solid var(--slate-200); border-radius: var(--radius); padding: 16px 18px;
+  display: flex; align-items: center; gap: 16px; margin-bottom: 12px; flex-wrap: wrap;
+}
+.case-row .ci { font-size: 1.4rem; width: 44px; height: 44px; display: grid; place-items: center; border-radius: 10px; background: var(--slate-100); }
+.case-row .meta { flex: 1; min-width: 180px; }
+.case-row .meta h4 { margin: 0 0 2px; }
+.case-row .meta .sub { font-size: .82rem; color: var(--slate-500); }
+.status-select { padding: 8px 10px; border-radius: 8px; border: 1px solid var(--slate-300); font: inherit; }
+.status-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }
+.s-draft { background: var(--slate-400); }
+.s-sent { background: var(--brand); }
+.s-progress { background: var(--amber); }
+.s-resolved { background: var(--green); }
+
+/* ---------- Assistant ---------- */
+.chat-wrap { display: grid; grid-template-columns: 1fr 320px; gap: 24px; align-items: start; }
+.chat-box { background: #fff; border: 1px solid var(--slate-200); border-radius: var(--radius); display: flex; flex-direction: column; height: 64vh; min-height: 460px; box-shadow: var(--shadow); }
+.chat-log { flex: 1; overflow-y: auto; padding: 22px; display: flex; flex-direction: column; gap: 14px; }
+.msg { max-width: 80%; padding: 12px 16px; border-radius: 14px; font-size: .96rem; }
+.msg.bot { background: var(--slate-100); border-bottom-left-radius: 4px; align-self: flex-start; }
+.msg.user { background: var(--brand); color: #fff; border-bottom-right-radius: 4px; align-self: flex-end; }
+.msg.bot strong { color: var(--navy-900); }
+.msg .src { display: block; margin-top: 8px; font-size: .78rem; color: var(--slate-500); }
+.chat-input { display: flex; gap: 10px; padding: 14px; border-top: 1px solid var(--slate-200); }
+.chat-input input { flex: 1; padding: 12px 14px; border: 1px solid var(--slate-300); border-radius: 10px; font: inherit; }
+.suggestions { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 14px 14px; }
+
+/* ---------- Rights / articles ---------- */
+.article-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+.article { background: #fff; border: 1px solid var(--slate-200); border-radius: var(--radius); padding: 22px; }
+.article h3 { margin-top: 0; }
+.article details { margin-top: 8px; }
+.article summary { cursor: pointer; font-weight: 600; color: var(--brand); padding: 6px 0; }
+.article details p { margin-top: 8px; color: var(--navy-700); font-size: .94rem; }
+
+.prose { max-width: 75ch; margin: 0 auto; }
+.prose h2 { margin-top: 1.6em; }
+.prose ul { padding-left: 22px; }
+.prose li { margin-bottom: 8px; }
+
+/* ---------- Empty / misc ---------- */
+.empty { text-align: center; padding: 60px 20px; color: var(--slate-500); }
+.empty .big { font-size: 3rem; margin-bottom: 10px; }
+.crumbs { font-size: .88rem; color: var(--slate-500); margin-bottom: 14px; }
+.crumbs a { color: var(--slate-600); }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.mt-2 { margin-top: 16px; } .mt-3 { margin-top: 24px; } .mb-0 { margin-bottom: 0; }
+.text-center { text-align: center; }
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(120%);
+  background: var(--navy-900); color: #fff; padding: 14px 22px; border-radius: 12px; box-shadow: var(--shadow-lg);
+  z-index: 300; transition: transform .3s ease; font-weight: 600; max-width: 90vw;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.ok { background: #14532d; }
+.toast.err { background: #7f1d1d; }
+
+/* ---------- Footer ---------- */
+.site-footer { background: var(--navy-900); color: var(--slate-300); padding: 48px 0 0; margin-top: 40px; }
+.footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 30px; padding-bottom: 30px; }
+.footer-grid h4 { color: #fff; font-size: .95rem; margin-bottom: 10px; }
+.footer-grid a { display: block; color: var(--slate-400); padding: 4px 0; font-size: .92rem; }
+.footer-grid a:hover { color: #fff; }
+.disclaimer-bar { border-top: 1px solid rgba(255,255,255,.1); padding: 16px 20px; }
+.disclaimer-bar p { font-size: .82rem; color: var(--slate-400); margin: 0; text-align: center; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 940px) {
+  .hero .container { grid-template-columns: 1fr; gap: 30px; }
+  .wizard-wrap, .doc-wrap, .chat-wrap { grid-template-columns: 1fr; }
+  .doc-actions { position: static; flex-direction: row; flex-wrap: wrap; }
+  .stat-row { grid-template-columns: repeat(2, 1fr); }
+  .steps { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .nav-toggle { display: flex; }
+  .primary-nav {
+    position: absolute; top: 64px; left: 0; right: 0; flex-direction: column; align-items: stretch;
+    background: var(--navy-900); padding: 12px; gap: 4px; border-bottom: 1px solid rgba(255,255,255,.1);
+    transform: translateY(-130%); transition: transform .28s; box-shadow: var(--shadow-lg);
+  }
+  .primary-nav.open { transform: translateY(0); }
+  .lang-switch { margin: 8px 0 0; align-self: flex-start; }
+  .field-row { grid-template-columns: 1fr; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .doc-paper { padding: 32px 24px; }
+}
+
+/* ---------- Print ---------- */
+@media print {
+  .site-header, .site-footer, .doc-actions, .nav-toggle, .toast, .crumbs, .skip-link { display: none !important; }
+  body { background: #fff; }
+  .app-main { padding: 0; }
+  .doc-wrap { display: block; }
+  .doc-paper { box-shadow: none; border: 0; padding: 0; font-size: 12pt; }
+  @page { margin: 2cm; }
+}
+
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Mi sitio de noticias</h1>
-        <nav>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+
+  <header class="site-header" id="siteHeader">
+    <div class="container header-inner">
+      <a class="brand" href="#/" aria-label="JusticiaBot inicio">
+        <span class="brand-mark" aria-hidden="true">⚖️</span>
+        <span class="brand-name">Justicia<span>Bot</span></span>
+      </a>
+
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primaryNav" aria-label="Abrir menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="primary-nav" id="primaryNav" aria-label="Navegacion principal">
+        <a href="#/" data-i18n="nav.home">Inicio</a>
+        <a href="#/casos" data-i18n="nav.cases">Casos</a>
+        <a href="#/asistente" data-i18n="nav.assistant">Asistente</a>
+        <a href="#/panel" data-i18n="nav.dashboard">Mis casos</a>
+        <a href="#/derechos" data-i18n="nav.rights">Derechos</a>
+        <div class="lang-switch" role="group" aria-label="Idioma">
+          <button data-lang="es" class="lang-btn">ES</button>
+          <button data-lang="en" class="lang-btn">EN</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="app-main" tabindex="-1">
+    <div id="view" class="view"></div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <div class="brand small">
+          <span class="brand-mark" aria-hidden="true">⚖️</span>
+          <span class="brand-name">Justicia<span>Bot</span></span>
+        </div>
+        <p class="muted" data-i18n="footer.tagline">Tu copiloto legal de codigo abierto. Sin abogados, sin esperas.</p>
+      </div>
+      <div>
+        <h4 data-i18n="footer.product">Producto</h4>
+        <a href="#/casos" data-i18n="nav.cases">Casos</a>
+        <a href="#/asistente" data-i18n="nav.assistant">Asistente</a>
+        <a href="#/panel" data-i18n="nav.dashboard">Mis casos</a>
+      </div>
+      <div>
+        <h4 data-i18n="footer.learn">Aprende</h4>
+        <a href="#/derechos" data-i18n="nav.rights">Derechos</a>
+        <a href="#/aviso-legal" data-i18n="footer.legal">Aviso legal</a>
+      </div>
+    </div>
+    <div class="container disclaimer-bar">
+      <p data-i18n="footer.disclaimer">⚠️ JusticiaBot es una herramienta de informacion y generacion de documentos. No es un despacho de abogados ni sustituye el asesoramiento juridico profesional. Las leyes varian segun la jurisdiccion.</p>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+(function() {
+"use strict";
+
+// === i18n.js ===
+/* ============================================================
+   i18n — Internacionalización ES / EN
+   ============================================================ */
+
+const STRINGS = {
+  es: {
+    "nav.home": "Inicio",
+    "nav.cases": "Casos",
+    "nav.assistant": "Asistente",
+    "nav.dashboard": "Mis casos",
+    "nav.rights": "Derechos",
+    "footer.tagline": "Tu copiloto legal de código abierto. Sin abogados, sin esperas.",
+    "footer.product": "Producto",
+    "footer.learn": "Aprende",
+    "footer.legal": "Aviso legal",
+    "footer.disclaimer": "⚠️ JusticiaBot es una herramienta de información y generación de documentos. No es un despacho de abogados ni sustituye el asesoramiento jurídico profesional. Las leyes varían según la jurisdicción.",
+
+    // Hero
+    "hero.eyebrow": "Justicia al alcance de todos",
+    "hero.title": "Pelea cualquier caso. Sin abogados, sin estrés.",
+    "hero.lead": "Genera cartas y documentos legales listos para enviar en minutos: multas, reembolsos, depósitos, deudas, vuelos, privacidad y mucho más.",
+    "hero.cta1": "Explorar casos",
+    "hero.cta2": "Hablar con el asistente",
+    "hero.searchPlaceholder": "¿Qué problema quieres resolver?",
+    "hero.searchBtn": "Buscar",
+    "hero.popular": "Populares:",
+    "hero.stat1": "casos cubiertos",
+    "hero.stat2": "documentos generables",
+    "hero.stat3": "gratis y privado",
+
+    // Home sections
+    "home.catsTitle": "¿Con qué necesitas ayuda?",
+    "home.catsLead": "Elige una categoría y te guiamos paso a paso hasta tu documento.",
+    "home.howTitle": "Cómo funciona",
+    "home.howLead": "Tres pasos. Cero jerga legal innecesaria.",
+    "home.step1Title": "Cuéntanos tu caso",
+    "home.step1Desc": "Responde unas preguntas sencillas en un formulario guiado.",
+    "home.step2Title": "Generamos tu documento",
+    "home.step2Desc": "Creamos una carta o escrito legal profesional con tus datos.",
+    "home.step3Title": "Envía y haz seguimiento",
+    "home.step3Desc": "Descarga, imprime o copia. Gestiona el estado de cada caso.",
+    "home.privacyTitle": "Tus datos nunca salen de tu dispositivo",
+    "home.privacyDesc": "Todo se procesa y guarda localmente en tu navegador (localStorage). No hay servidores ni rastreo.",
+    "home.startNow": "Empezar ahora",
+
+    // Cases page
+    "cases.title": "Todos los casos",
+    "cases.lead": "Selecciona tu situación. Cada asistente genera un documento listo para usar.",
+    "cases.searchPlaceholder": "Buscar caso (p. ej. multa, reembolso, depósito)...",
+    "cases.all": "Todos",
+    "cases.none": "No se encontraron casos con ese filtro.",
+    "cases.start": "Iniciar",
+    "cases.steps": "pasos",
+
+    // Wizard
+    "wiz.back": "Atrás",
+    "wiz.next": "Siguiente",
+    "wiz.generate": "Generar documento",
+    "wiz.step": "Paso",
+    "wiz.of": "de",
+    "wiz.required": "Este campo es obligatorio.",
+    "wiz.tipsTitle": "Consejos para este caso",
+    "wiz.jurisHint": "Nota de jurisdicción",
+    "wiz.startOver": "Reiniciar",
+
+    // Document
+    "doc.title": "Tu documento está listo",
+    "doc.lead": "Revisa el texto, edítalo si lo necesitas y elige cómo usarlo.",
+    "doc.copy": "Copiar texto",
+    "doc.download": "Descargar (.txt)",
+    "doc.print": "Imprimir / PDF",
+    "doc.save": "Guardar en mis casos",
+    "doc.edit": "Editar texto",
+    "doc.saved": "Guardado en cambios",
+    "doc.copied": "Texto copiado al portapapeles",
+    "doc.savedCase": "Caso guardado en «Mis casos»",
+    "doc.nextSteps": "Próximos pasos",
+    "doc.editHint": "Puedes editar el documento directamente antes de descargarlo.",
+
+    // Dashboard
+    "dash.title": "Mis casos",
+    "dash.lead": "Gestiona y haz seguimiento de los documentos que has generado.",
+    "dash.total": "Total",
+    "dash.draft": "Borrador",
+    "dash.sent": "Enviado",
+    "dash.progress": "En curso",
+    "dash.resolved": "Resuelto",
+    "dash.empty": "Aún no tienes casos guardados.",
+    "dash.emptyCta": "Crear mi primer caso",
+    "dash.view": "Ver documento",
+    "dash.delete": "Eliminar",
+    "dash.created": "Creado",
+    "dash.status": "Estado",
+    "dash.export": "Exportar todo (JSON)",
+    "dash.confirmDelete": "¿Eliminar este caso? No se puede deshacer.",
+    "dash.deleted": "Caso eliminado",
+
+    // Assistant
+    "assist.title": "Asistente legal",
+    "assist.lead": "Pregunta sobre tus derechos. Te oriento y te llevo al documento adecuado.",
+    "assist.placeholder": "Escribe tu pregunta...",
+    "assist.send": "Enviar",
+    "assist.greeting": "Hola 👋 Soy tu asistente legal. Cuéntame qué problema tienes (una multa, un reembolso, un depósito sin devolver, una deuda...) y te oriento. ¿En qué te ayudo?",
+    "assist.topicsTitle": "Temas frecuentes",
+    "assist.openCase": "Abrir asistente de este caso →",
+    "assist.disclaimer": "Información general, no asesoramiento jurídico.",
+
+    // Rights
+    "rights.title": "Biblioteca de derechos",
+    "rights.lead": "Guías claras sobre tus derechos como consumidor, inquilino, trabajador y usuario.",
+
+    // Legal
+    "legal.title": "Aviso legal y privacidad",
+
+    // common
+    "common.disclaimerShort": "Información general, no constituye asesoramiento jurídico.",
+  },
+
+  en: {
+    "nav.home": "Home",
+    "nav.cases": "Cases",
+    "nav.assistant": "Assistant",
+    "nav.dashboard": "My cases",
+    "nav.rights": "Rights",
+    "footer.tagline": "Your open-source legal copilot. No lawyers, no waiting.",
+    "footer.product": "Product",
+    "footer.learn": "Learn",
+    "footer.legal": "Legal notice",
+    "footer.disclaimer": "⚠️ JusticiaBot is an information and document-generation tool. It is not a law firm and does not replace professional legal advice. Laws vary by jurisdiction.",
+
+    "hero.eyebrow": "Justice within everyone's reach",
+    "hero.title": "Fight any case. No lawyers, no stress.",
+    "hero.lead": "Generate ready-to-send legal letters and documents in minutes: tickets, refunds, deposits, debts, flights, privacy and much more.",
+    "hero.cta1": "Explore cases",
+    "hero.cta2": "Talk to the assistant",
+    "hero.searchPlaceholder": "What problem do you want to solve?",
+    "hero.searchBtn": "Search",
+    "hero.popular": "Popular:",
+    "hero.stat1": "cases covered",
+    "hero.stat2": "generable documents",
+    "hero.stat3": "free & private",
+
+    "home.catsTitle": "What do you need help with?",
+    "home.catsLead": "Pick a category and we guide you step by step to your document.",
+    "home.howTitle": "How it works",
+    "home.howLead": "Three steps. Zero unnecessary legal jargon.",
+    "home.step1Title": "Tell us your case",
+    "home.step1Desc": "Answer a few simple questions in a guided form.",
+    "home.step2Title": "We generate your document",
+    "home.step2Desc": "We craft a professional legal letter with your details.",
+    "home.step3Title": "Send and track",
+    "home.step3Desc": "Download, print or copy. Manage each case's status.",
+    "home.privacyTitle": "Your data never leaves your device",
+    "home.privacyDesc": "Everything is processed and stored locally in your browser (localStorage). No servers, no tracking.",
+    "home.startNow": "Start now",
+
+    "cases.title": "All cases",
+    "cases.lead": "Select your situation. Each assistant generates a ready-to-use document.",
+    "cases.searchPlaceholder": "Search case (e.g. ticket, refund, deposit)...",
+    "cases.all": "All",
+    "cases.none": "No cases found for that filter.",
+    "cases.start": "Start",
+    "cases.steps": "steps",
+
+    "wiz.back": "Back",
+    "wiz.next": "Next",
+    "wiz.generate": "Generate document",
+    "wiz.step": "Step",
+    "wiz.of": "of",
+    "wiz.required": "This field is required.",
+    "wiz.tipsTitle": "Tips for this case",
+    "wiz.jurisHint": "Jurisdiction note",
+    "wiz.startOver": "Start over",
+
+    "doc.title": "Your document is ready",
+    "doc.lead": "Review the text, edit if needed and choose how to use it.",
+    "doc.copy": "Copy text",
+    "doc.download": "Download (.txt)",
+    "doc.print": "Print / PDF",
+    "doc.save": "Save to my cases",
+    "doc.edit": "Edit text",
+    "doc.saved": "Changes saved",
+    "doc.copied": "Text copied to clipboard",
+    "doc.savedCase": "Case saved to \"My cases\"",
+    "doc.nextSteps": "Next steps",
+    "doc.editHint": "You can edit the document directly before downloading.",
+
+    "dash.title": "My cases",
+    "dash.lead": "Manage and track the documents you've generated.",
+    "dash.total": "Total",
+    "dash.draft": "Draft",
+    "dash.sent": "Sent",
+    "dash.progress": "In progress",
+    "dash.resolved": "Resolved",
+    "dash.empty": "You don't have any saved cases yet.",
+    "dash.emptyCta": "Create my first case",
+    "dash.view": "View document",
+    "dash.delete": "Delete",
+    "dash.created": "Created",
+    "dash.status": "Status",
+    "dash.export": "Export all (JSON)",
+    "dash.confirmDelete": "Delete this case? This cannot be undone.",
+    "dash.deleted": "Case deleted",
+
+    "assist.title": "Legal assistant",
+    "assist.lead": "Ask about your rights. I guide you and point you to the right document.",
+    "assist.placeholder": "Type your question...",
+    "assist.send": "Send",
+    "assist.greeting": "Hi 👋 I'm your legal assistant. Tell me your problem (a ticket, a refund, an unreturned deposit, a debt...) and I'll guide you. How can I help?",
+    "assist.topicsTitle": "Popular topics",
+    "assist.openCase": "Open this case's assistant →",
+    "assist.disclaimer": "General information, not legal advice.",
+
+    "rights.title": "Rights library",
+    "rights.lead": "Clear guides on your rights as a consumer, tenant, worker and user.",
+
+    "legal.title": "Legal notice & privacy",
+
+    "common.disclaimerShort": "General information, not legal advice.",
+  },
+};
+
+const I18N_KEY = "jb_lang";
+let current = localStorage.getItem(I18N_KEY) || (navigator.language || "es").slice(0, 2);
+if (!STRINGS[current]) current = "es";
+
+function getLang() { return current; }
+
+function setLang(lang) {
+  if (!STRINGS[lang]) return;
+  current = lang;
+  localStorage.setItem(I18N_KEY, lang);
+  document.documentElement.lang = lang;
+  applyStaticTranslations();
+  document.dispatchEvent(new CustomEvent("langchange", { detail: { lang } }));
+}
+
+/** Traduce una clave; admite valores objeto {es,en}. */
+function t(key) {
+  const dict = STRINGS[current] || STRINGS.es;
+  return dict[key] ?? STRINGS.es[key] ?? key;
+}
+
+/** Devuelve el texto localizado de un campo {es,en} o string. */
+function loc(val) {
+  if (val == null) return "";
+  if (typeof val === "string") return val;
+  return val[current] ?? val.es ?? val.en ?? "";
+}
+
+/** Aplica traducciones a elementos con data-i18n (header/footer estáticos). */
+function applyStaticTranslations() {
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    el.textContent = t(el.getAttribute("data-i18n"));
+  });
+  document.querySelectorAll("[data-i18n-ph]").forEach((el) => {
+    el.setAttribute("placeholder", t(el.getAttribute("data-i18n-ph")));
+  });
+  document.querySelectorAll(".lang-btn").forEach((b) => {
+    b.classList.toggle("active", b.dataset.lang === current);
+  });
+}
+
+
+// === store.js ===
+/* ============================================================
+   Store — Gestión de casos en localStorage
+   ============================================================ */
+
+const STORE_KEY = "jb_cases_v1";
+
+function read() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function write(list) {
+  localStorage.setItem(STORE_KEY, JSON.stringify(list));
+  document.dispatchEvent(new CustomEvent("caseschange"));
+}
+
+const STATUSES = ["draft", "sent", "progress", "resolved"];
+
+function getCases() {
+  return read().sort((a, b) => b.createdAt - a.createdAt);
+}
+
+function getCase(id) {
+  return read().find((c) => c.id === id) || null;
+}
+
+function saveCase(payload) {
+  const list = read();
+  const now = Date.now();
+  const existingIdx = payload.id ? list.findIndex((c) => c.id === payload.id) : -1;
+
+  if (existingIdx >= 0) {
+    list[existingIdx] = { ...list[existingIdx], ...payload, updatedAt: now };
+    write(list);
+    return list[existingIdx];
+  }
+
+  const record = {
+    id: "c_" + now.toString(36) + Math.random().toString(36).slice(2, 6),
+    caseType: payload.caseType,
+    title: payload.title,
+    icon: payload.icon || "📄",
+    document: payload.document || "",
+    values: payload.values || {},
+    status: payload.status || "draft",
+    notes: payload.notes || "",
+    createdAt: now,
+    updatedAt: now,
+  };
+  list.push(record);
+  write(list);
+  return record;
+}
+
+function updateCase(id, patch) {
+  const list = read();
+  const idx = list.findIndex((c) => c.id === id);
+  if (idx < 0) return null;
+  list[idx] = { ...list[idx], ...patch, updatedAt: Date.now() };
+  write(list);
+  return list[idx];
+}
+
+function deleteCase(id) {
+  write(read().filter((c) => c.id !== id));
+}
+
+function stats() {
+  const list = read();
+  const s = { total: list.length, draft: 0, sent: 0, progress: 0, resolved: 0 };
+  list.forEach((c) => { s[c.status] = (s[c.status] || 0) + 1; });
+  return s;
+}
+
+function exportJSON() {
+  return JSON.stringify(read(), null, 2);
+}
+
+
+// === utils.js ===
+/* ============================================================
+   Utils — Helpers de DOM, formato y notificaciones
+   ============================================================ */
+
+
+/** Escapa HTML para evitar inyección al renderizar datos del usuario. */
+function esc(str) {
+  return String(str ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+/** Crea un elemento desde HTML. */
+function html(strings, ...values) {
+  return strings.reduce((acc, s, i) => acc + s + (values[i] ?? ""), "");
+}
+
+/** Notificación tipo toast. */
+let toastTimer;
+function toast(message, type = "") {
+  const el = document.getElementById("toast");
+  if (!el) return;
+  el.textContent = message;
+  el.className = "toast show " + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.className = "toast " + type; }, 3200);
+}
+
+/** Formatea una fecha legible según idioma. */
+function fmtDate(ts) {
+  const d = new Date(ts);
+  const locale = getLang() === "en" ? "en-US" : "es-ES";
+  return d.toLocaleDateString(locale, { year: "numeric", month: "long", day: "numeric" });
+}
+
+/** Fecha de hoy en formato largo para documentos. */
+function today() {
+  return fmtDate(Date.now());
+}
+
+/** Formatea importe monetario; devuelve string tal cual si no es numérico. */
+function money(val, currency = "") {
+  const n = Number(String(val).replace(/[^0-9.,-]/g, "").replace(",", "."));
+  if (isNaN(n)) return val || "";
+  const locale = getLang() === "en" ? "en-US" : "es-ES";
+  const formatted = n.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return currency ? `${formatted} ${currency}` : formatted;
+}
+
+/** Descarga un archivo de texto. */
+function downloadText(filename, text) {
+  const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+/** Copia texto al portapapeles con fallback. */
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    let ok = false;
+    try { ok = document.execCommand("copy"); } catch {}
+    ta.remove();
+    return ok;
+  }
+}
+
+/** Normaliza texto para búsquedas (sin acentos, minúsculas). */
+function normalize(str) {
+  return String(str || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+/** Devuelve un valor o un guion si está vacío (para documentos). */
+function val(v, fallback = "____________") {
+  const s = String(v ?? "").trim();
+  return s ? s : fallback;
+}
+
+/** Slug para nombres de archivo. */
+function slug(str) {
+  return normalize(str).replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 50) || "documento";
+}
+
+
+// === data/cases.js ===
+/* ============================================================
+   cases.js — Catálogo de asistentes legales y generadores de
+   documentos. Cada caso define: categoría, icono, textos
+   bilingües, campos del formulario y un generador build().
+   ============================================================ */
+
+
+/* ---------- Categorías ---------- */
+const CATEGORIES = [
+  { id: "consumo",     icon: "🛒", name: { es: "Consumo", en: "Consumer" } },
+  { id: "vivienda",    icon: "🏠", name: { es: "Vivienda", en: "Housing" } },
+  { id: "transporte",  icon: "🚗", name: { es: "Transporte y viajes", en: "Transport & travel" } },
+  { id: "finanzas",    icon: "💳", name: { es: "Finanzas y deudas", en: "Finance & debt" } },
+  { id: "privacidad",  icon: "🔒", name: { es: "Privacidad y datos", en: "Privacy & data" } },
+  { id: "trabajo",     icon: "💼", name: { es: "Trabajo", en: "Work" } },
+  { id: "tramites",    icon: "📑", name: { es: "Trámites y disputas", en: "Disputes & filings" } },
+];
+
+function categoryById(id) {
+  return CATEGORIES.find((c) => c.id === id);
+}
+
+/* ---------- Helpers de redacción ---------- */
+function senderBlock(v, lang) {
+  const lines = [
+    val(v.fullName, lang === "en" ? "[Your full name]" : "[Tu nombre completo]"),
+    val(v.address, lang === "en" ? "[Your address]" : "[Tu dirección]"),
+  ];
+  if (v.email) lines.push(v.email);
+  if (v.phone) lines.push((lang === "en" ? "Tel: " : "Tel.: ") + v.phone);
+  return lines.join("\n");
+}
+
+function recipientBlock(name, address, lang) {
+  return [
+    val(name, lang === "en" ? "[Recipient name]" : "[Nombre del destinatario]"),
+    val(address, lang === "en" ? "[Recipient address]" : "[Dirección del destinatario]"),
+  ].join("\n");
+}
+
+function dateLine(lang) {
+  return (lang === "en" ? "Date: " : "Fecha: ") + today();
+}
+
+function signOff(v, lang) {
+  return (lang === "en" ? "Sincerely,\n\n\n" : "Atentamente,\n\n\n") +
+    val(v.fullName, lang === "en" ? "[Your full name]" : "[Tu nombre completo]");
+}
+
+
+/* ---------- Catálogo de casos ----------
+   field types: text | textarea | date | money | number | email | tel | select
+*/
+const CASES = [
+
+  /* ===================== CONSUMO ===================== */
+  {
+    id: "reembolso-producto",
+    category: "consumo",
+    icon: "📦",
+    title: { es: "Reclamar reembolso por producto defectuoso", en: "Claim a refund for a faulty product" },
+    desc: { es: "Carta para exigir la reparación, sustitución o devolución del dinero de un producto defectuoso.", en: "Letter demanding repair, replacement or refund for a defective product." },
+    juris: { es: "En la UE tienes derecho a una garantía legal mínima de 2 años (Directiva 1999/44/CE y 2019/771). En EE. UU. aplican garantías implícitas estatales (UCC).", en: "In the EU you have a minimum 2-year legal guarantee. In the US, implied warranties apply under the UCC." },
+    tips: {
+      es: ["Adjunta copia del ticket o factura.", "Describe el defecto con fechas concretas.", "Conserva la comunicación por escrito."],
+      en: ["Attach a copy of the receipt or invoice.", "Describe the defect with specific dates.", "Keep all communication in writing."],
+    },
+    nextSteps: {
+      es: ["Envía la carta por un medio con acuse de recibo (burofax, email con confirmación).", "Da un plazo de 14 días para responder.", "Si no responden, acude a la oficina de consumo o reclama judicialmente."],
+      en: ["Send the letter via a method with proof of receipt.", "Give a 14-day deadline to respond.", "If ignored, escalate to a consumer agency or small claims."],
+    },
+    fields: [
+      { name: "fullName", type: "text", req: true, label: { es: "Tu nombre completo", en: "Your full name" } },
+      { name: "address", type: "textarea", req: true, label: { es: "Tu dirección", en: "Your address" } },
+      { name: "email", type: "email", label: { es: "Tu email", en: "Your email" } },
+      { name: "phone", type: "tel", label: { es: "Tu teléfono", en: "Your phone" } },
+      { name: "company", type: "text", req: true, label: { es: "Empresa / vendedor", en: "Company / seller" } },
+      { name: "companyAddress", type: "textarea", label: { es: "Dirección de la empresa", en: "Company address" } },
+      { name: "product", type: "text", req: true, label: { es: "Producto", en: "Product" } },
+      { name: "orderRef", type: "text", label: { es: "Nº de pedido / factura", en: "Order / invoice no." } },
+      { name: "purchaseDate", type: "date", req: true, label: { es: "Fecha de compra", en: "Purchase date" } },
+      { name: "price", type: "money", label: { es: "Precio pagado", en: "Price paid" } },
+      { name: "problem", type: "textarea", req: true, label: { es: "Describe el defecto", en: "Describe the defect" } },
+      { name: "remedy", type: "select", req: true, label: { es: "Qué solución pides", en: "Remedy requested" },
+        options: [
+          { value: "reembolso", label: { es: "Reembolso completo", en: "Full refund" } },
+          { value: "sustitucion", label: { es: "Sustitución", en: "Replacement" } },
+          { value: "reparacion", label: { es: "Reparación", en: "Repair" } },
+        ] },
+    ],
+    build(v, lang) {
+      const remedyTxt = {
+        reembolso: { es: "el reembolso íntegro del importe abonado", en: "a full refund of the amount paid" },
+        sustitucion: { es: "la sustitución del producto por uno equivalente en perfecto estado", en: "replacement of the product with an equivalent in perfect condition" },
+        reparacion: { es: "la reparación del producto sin coste alguno", en: "repair of the product at no cost" },
+      }[v.remedy] || { es: "una solución adecuada", en: "an appropriate remedy" };
+
+      if (lang === "en") {
+        return `${senderBlock(v, lang)}
+
+${dateLine(lang)}
+
+${recipientBlock(v.company, v.companyAddress, lang)}
+
+Subject: Faulty product claim — ${val(v.product, "[product]")}${v.orderRef ? ` (Ref. ${v.orderRef})` : ""}
+
+Dear Sir or Madam,
+
+On ${val(v.purchaseDate, "[date]")} I purchased the product "${val(v.product, "[product]")}"${v.price ? ` for ${money(v.price)}` : ""} from your establishment. The product has shown the following defect:
+
+${val(v.problem, "[describe the defect]")}
+
+This defect makes the product unfit for its intended purpose. Under the applicable consumer-protection legislation and the legal guarantee of conformity, I am entitled to a remedy at no cost.
+
+I therefore request ${remedyTxt.en} within 14 calendar days of receipt of this letter.
+
+Should I not receive a satisfactory response within that period, I reserve the right to file a complaint with the competent consumer authority and to pursue any legal remedies available, including a claim for damages and costs.
+
+Please confirm receipt of this letter in writing.
+
+${signOff(v, lang)}`;
+      }
+
+      return `${senderBlock(v, lang)}
+
+${dateLine(lang)}
+
+${recipientBlock(v.company, v.companyAddress, lang)}
+
+Asunto: Reclamación por producto defectuoso — ${val(v.product, "[producto]")}${v.orderRef ? ` (Ref. ${v.orderRef})` : ""}
+
+Estimados señores:
+
+El día ${val(v.purchaseDate, "[fecha]")} adquirí en su establecimiento el producto «${val(v.product, "[producto]")}»${v.price ? ` por un importe de ${money(v.price)}` : ""}. El producto presenta el siguiente defecto:
+
+${val(v.problem, "[describa el defecto]")}
+
+Dicho defecto hace que el producto no sea conforme con el contrato ni apto para el uso al que se destina. Conforme a la normativa de protección de los consumidores y a la garantía legal de conformidad que me asiste, tengo derecho a una solución sin coste alguno.
+
+Por todo ello, SOLICITO ${remedyTxt.es} en un plazo de 14 días naturales desde la recepción de este escrito.
+
+De no recibir una respuesta satisfactoria en dicho plazo, me reservo el derecho de presentar la correspondiente reclamación ante la autoridad de consumo competente y de ejercer cuantas acciones legales me asistan, incluida la reclamación de daños y perjuicios.
+
+Le ruego confirme por escrito la recepción de la presente.
+
+${signOff(v, lang)}`;
+    },
+  },
+
+  {
+    id: "cancelar-suscripcion",
+    category: "consumo",
+    icon: "🔁",
+    title: { es: "Cancelar una suscripción o membresía", en: "Cancel a subscription or membership" },
+    desc: { es: "Carta formal para cancelar suscripciones recurrentes (gimnasio, streaming, software) y detener cobros.", en: "Formal letter to cancel recurring subscriptions (gym, streaming, software) and stop charges." },
+    juris: { es: "Muchas jurisdicciones obligan a permitir la cancelación por el mismo medio de alta. Conserva prueba de la fecha.", en: "Many jurisdictions require cancellation by the same channel used to sign up. Keep proof of the date." },
+    tips: {
+      es: ["Indica que revocas cualquier autorización de cargo recurrente.", "Pide confirmación por escrito.", "Vigila tu cuenta para detectar cobros posteriores."],
+      en: ["State that you revoke any recurring charge authorization.", "Ask for written confirmation.", "Monitor your account for any later charges."],
+    },
+    nextSteps: {
+      es: ["Envía la carta y guarda el acuse.", "Si te siguen cobrando, solicita el contracargo a tu banco.", "Conserva la confirmación de baja."],
+      en: ["Send the letter and keep the receipt.", "If charges continue, request a chargeback from your bank.", "Keep the cancellation confirmation."],
+    },
+    fields: [
+      { name: "fullName", type: "text", req: true, label: { es: "Tu nombre completo", en: "Your full name" } },
+      { name: "address", type: "textarea", label: { es: "Tu dirección", en: "Your address" } },
+      { name: "email", type: "email", label: { es: "Tu email", en: "Your email" } },
+      { name: "company", type: "text", req: true, label: { es: "Empresa / servicio", en: "Company / service" } },
+      { name: "companyAddress", type: "textarea", label: { es: "Dirección de la empresa", en: "Company address" } },
+      { name: "accountId", type: "text", req: true, label: { es: "Nº de cuenta / cliente / email asociado", en: "Account / customer no. / linked email" } },
+      { name: "startDate", type: "date", label: { es: "Fecha de alta", en: "Start date" } },
+      { name: "effectiveDate", type: "date", label: { es: "Fecha deseada de baja", en: "Desired cancellation date" } },
+      { name: "reason", type: "textarea", label: { es: "Motivo (opcional)", en: "Reason (optional)" } },
+    ],
+    build(v, lang) {
+      if (lang === "en") {
+        return `${senderBlock(v, lang)}
+
+${dateLine(lang)}
+
+${recipientBlock(v.company, v.companyAddress, lang)}
+
+Subject: Cancellation of subscription — Account ${val(v.accountId, "[account]")}
+
+Dear Sir or Madam,
+
+I am writing to formally cancel my subscription / membership with ${val(v.company, "[company]")}, associated with account ${val(v.accountId, "[account]")}${v.startDate ? `, started on ${v.startDate}` : ""}.
+
+I request that the cancellation take effect ${v.effectiveDate ? `on ${v.effectiveDate}` : "immediately"} and that you cease all recurring charges. I hereby revoke any prior authorization to charge my payment method.
+${v.reason ? `\nReason: ${v.reason}\n` : ""}
+Please send me written confirmation of the cancellation and of the date from which no further charges will be made. Any charge applied after the effective date will be disputed.
+
+${signOff(v, lang)}`;
+      }
+      return `${senderBlock(v, lang)}
+
+${dateLine(lang)}
+
+${recipientBlock(v.company, v.companyAddress, lang)}
+
+Asunto: Baja de suscripción — Cuenta ${val(v.accountId, "[cuenta]")}
+
+Estimados señores:
+
+Por la presente solicito la baja definitiva de mi suscripción / membresía con ${val(v.company, "[empresa]")}, asociada a la cuenta ${val(v.accountId, "[cuenta]")}${v.startDate ? `, dada de alta el ${v.startDate}` : ""}.
+
+Solicito que la baja surta efecto ${v.effectiveDate ? `el ${v.effectiveDate}` : "de forma inmediata"} y que cesen todos los cargos recurrentes. Mediante este escrito REVOCO cualquier autorización previa de cargo sobre mi medio de pago.
+${v.reason ? `\nMotivo: ${v.reason}\n` : ""}
+Le ruego me remita confirmación por escrito de la baja y de la fecha a partir de la cual no se realizarán más cobros. Cualquier cargo posterior a la fecha de efecto será objeto de reclamación y contracargo.
+
+${signOff(v, lang)}`;
+    },
+  },
+
+  {
+    id: "garantia-producto",
+    category: "consumo",
+    icon: "🛠️",
+    title: { es: "Reclamar la garantía de un producto", en: "Claim a product warranty" },
+    desc: { es: "Exige al fabricante o vendedor que cumpla la garantía cuando un producto falla dentro del periodo cubierto.", en: "Demand the manufacturer or seller honor the warranty when a product fails within the covered period." },
+    juris: { es: "La garantía comercial nunca puede reducir la garantía legal mínima. Conserva la prueba de compra.", en: "A commercial warranty can never reduce the minimum legal guarantee. Keep proof of purchase." },
+    tips: {
+      es: ["Cita el número y duración de la garantía.", "Adjunta el certificado de garantía si lo tienes.", "Describe los intentos previos de solución."],
+      en: ["Quote the warranty number and duration.", "Attach the warranty certificate if available.", "Describe any previous repair attempts."],
+    },
+    nextSteps: {
+      es: ["Entrega el producto en el punto indicado guardando resguardo.", "Exige plazo razonable de reparación.", "Si reincide el fallo, pide sustitución o reembolso."],
+      en: ["Hand in the product at the indicated point and keep the receipt.", "Demand a reasonable repair timeframe.", "If the fault recurs, request replacement or refund."],
+    },
+    fields: [
+      { name: "fullName", type: "text", req: true, label: { es: "Tu nombre completo", en: "Your full name" } },
+      { name: "address", type: "textarea", label: { es: "Tu dirección", en: "Your address" } },
+      { name: "email", type: "email", label: { es: "Tu email", en: "Your email" } },
+      { name: "company", type: "text", req: true, label: { es: "Fabricante / vendedor", en: "Manufacturer / seller" } },
+      { name: "companyAddress", type: "textarea", label: { es: "Dirección", en: "Address" } },
+      { name: "product", type: "text", req: true, label: { es: "Producto y modelo", en: "Product and model" } },
+      { name: "purchaseDate", type: "date", req: true, label: { es: "Fecha de compra", en: "Purchase date" } },
+      { name: "warrantyRef", type: "text", label: { es: "Nº de garantía / serie", en: "Warranty / serial no." } },
+      { name: "problem", type: "textarea", req: true, label: { es: "Fallo que presenta", en: "Fault presented" } },
+    ],
+    build(v, lang) {
+      if (lang === "en") {
+        return `${senderBlock(v, lang)}
+
+${dateLine(lang)}
+
+${recipientBlock(v.company, v.companyAddress, lang)}
+
+Subject: Warranty claim — ${val(v.product, "[product]")}${v.warrantyRef ? ` (${v.warrantyRef})` : ""}
+
+Dear Sir or Madam,
+
+The product "${val(v.product, "[product]")}", purchased on ${val(v.purchaseDate, "[date]")}, is covered by warranty and has developed the following fault:
+
+${val(v.problem, "[describe the fault]")}
+
+As the product is within the warranty period, I request that you honor the warranty by repairing or replacing it at no cost within a reasonable timeframe, and provide a courtesy unit or compensation for the time without service where applicable.
+
+Please confirm in writing the procedure and the expected resolution date.
+
+${signOff(v, lang)}`;
+      }
+      return `${senderBlock(v, lang)}
+
+${dateLine(lang)}
+
+${recipientBlock(v.company, v.companyAddress, lang)}
+
+Asunto: Reclamación de garantía — ${val(v.product, "[producto]")}${v.warrantyRef ? ` (${v.warrantyRef})` : ""}
+
+Estimados señores:
+
+El producto «${val(v.product, "[producto]")}», adquirido el ${val(v.purchaseDate, "[fecha]")}, se encuentra dentro del periodo de garantía y presenta el siguiente fallo:
+
+${val(v.problem, "[describa el fallo]")}
+
+Por encontrarse el producto en garantía, SOLICITO que se haga efectiva mediante su reparación o sustitución sin coste y en un plazo razonable, así como, en su caso, la entrega de una unidad de cortesía o la compensación por el tiempo sin servicio.
+
+Le ruego me confirme por escrito el procedimiento a seguir y la fecha prevista de resolución.
+
+${signOff(v, lang)}`;
+    },
+  },
+
+  {
+    id: "queja-formal",
+    category: "consumo",
+    icon: "📣",
+    title: { es: "Presentar una queja formal a una empresa", en: "File a formal complaint with a company" },
+    desc: { es: "Documento estructurado para dejar constancia de una mala experiencia y exigir una solución concreta.", en: "Structured document to formally record a bad experience and demand a specific remedy." },
+    juris: { es: "Las hojas de reclamaciones son obligatorias en muchos comercios. Pide siempre tu copia sellada.", en: "Keep a stamped copy of any complaint form the business provides." },
+    tips: {
+      es: ["Sé objetivo: hechos, fechas y datos.", "Pide una solución concreta y un plazo.", "Indica el medio por el que quieres respuesta."],
+      en: ["Stay factual: events, dates and figures.", "Ask for a specific remedy and a deadline.", "State how you want to be contacted."],
+    },
+    nextSteps: {
+      es: ["Guarda copia y acuse de recibo.", "Si no responden en el plazo, escala a consumo.", "Considera reseñas y mediación como presión adicional."],
+      en: ["Keep a copy and proof of receipt.", "If unanswered, escalate to a consumer body.", "Consider reviews and mediation as added pressure."],
+    },
+    fields: [
+      { name: "fullName", type: "text", req: true, label: { es: "Tu nombre completo", en: "Your full name" } },
+      { name: "address", type: "textarea", label: { es: "Tu dirección", en: "Your address" } },
+      { name: "email", type: "email", label: { es: "Tu email", en: "Your email" } },
+      { name: "company", type: "text", req: true, label: { es: "Empresa", en: "Company" } },
+      { name: "companyAddress", type: "textarea", label: { es: "Dirección de la empresa", en: "Company address" } },
+      { name: "incidentDate", type: "date", req: true, label: { es: "Fecha del incidente", en: "Date of incident" } },
+      { name: "facts", type: "textarea", req: true, label: { es: "Qué ocurrió", en: "What happened" } },
+      { name: "request", type: "textarea", req: true, label: { es: "Qué solución pides", en: "Remedy requested" } },
+    ],
+    build(v, lang) {
+      if (lang === "en") {
+        return `${senderBlock(v, lang)}
+
+${dateLine(lang)}
+
+${recipientBlock(v.company, v.companyAddress, lang)}
+
+Subject: Formal complaint
+
+Dear Sir or Madam,
+
+I am writing to formally lodge a complaint regarding an incident that occurred on ${val(v.incidentDate, "[date]")}.
+
+Facts:
+${val(v.facts, "[describe what happened]")}
+
+This situation has caused me a clear detriment and is, in my view, contrary to the standard of service I am entitled to expect.
+
+Requested remedy:
+${val(v.request, "[state the remedy you want]")}
+
+I request a written response within 14 days. Please treat this letter as a formal complaint for all relevant purposes.
+
+${signOff(v, lang)}`;
+      }
+      return `${senderBlock(v, lang)}
+
+${dateLine(lang)}
+
+${recipientBlock(v.company, v.companyAddress, lang)}
+
+Asunto: Queja formal
+
+Estimados señores:
+
+Por la presente formulo QUEJA FORMAL en relación con el incidente ocurrido el ${val(v.incidentDate, "[fecha]")}.
+
+Hechos:
+${val(v.facts, "[describa lo ocurrido]")}
+
+Esta situación me ha causado un perjuicio evidente y resulta, a mi juicio, contraria a la calidad del servicio que tengo derecho a esperar.
+
+Solución solicitada:
+${val(v.request, "[indique la solución que desea]")}
+
+Solicito respuesta por escrito en el plazo de 14 días. Ruego se tenga por presentada esta queja a todos los efectos.
+
+${signOff(v, lang)}`;
+    },
+  },
+
+
+  /* ===================== VIVIENDA ===================== */
+  {
+    id: "deposito-alquiler",
+    category: "vivienda",
+    icon: "🔑",
+    title: { es: "Reclamar la fianza / depósito del alquiler", en: "Reclaim your rental security deposit" },
+    desc: { es: "Exige al arrendador la devolución de la fianza retenida injustamente tras dejar la vivienda.", en: "Demand your landlord return a security deposit unfairly withheld after you moved out." },
+    juris: { es: "Los plazos de devolución varían (p. ej. 30 días en muchos lugares). El desgaste normal no justifica retenciones.", en: "Return deadlines vary (e.g. 30 days in many places). Normal wear and tear cannot justify deductions." },
+    tips: {
+      es: ["Adjunta fotos del estado de salida y el inventario de entrada.", "Reclama intereses si la ley los prevé.", "Da una cuenta para la transferencia."],
+      en: ["Attach move-out photos and the move-in inventory.", "Claim interest if the law allows it.", "Provide an account for the transfer."],
+    },
+    nextSteps: {
+      es: ["Envía por medio fehaciente con acuse.", "Si no devuelven en plazo, reclama judicialmente (suele ser proceso rápido).", "Conserva todas las pruebas del estado del inmueble."],
+      en: ["Send by a traceable method with receipt.", "If not returned in time, file a small-claims case.", "Keep all evidence of the property's condition."],
+    },
+    fields: [
+      { name: "fullName", type: "text", req: true, label: { es: "Tu nombre completo", en: "Your full name" } },
+      { name: "address", type: "textarea", label: { es: "Tu dirección actual", en: "Your current address" } },
+      { name: "email", type: "email", label: { es: "Tu email", en: "Your email" } },
+      { name: "phone", type: "tel", label: { es: "Tu teléfono", en: "Your phone" } },
+      { name: "landlord", type: "text", req: true, label: { es: "Nombre del arrendador", en: "Landlord's name" } },
+      { name: "landlordAddress", type: "textarea", label: { es: "Dirección del arrendador", en: "Landlord's address" } },
+      { name: "rental", type: "textarea", req: true, label: { es: "Dirección de la vivienda alquilada", en: "Rented property address" } },
+      { name: "moveOut", type: "date", req: true, label: { es: "Fecha de fin del contrato / salida", en: "Move-out / lease end date" } },
+      { name: "deposit", type: "money", req: true, label: { es: "Importe de la fianza", en: "Deposit amount" } },
+      { name: "bankAccount", type: "text", label: { es: "Cuenta para la devolución (IBAN)", en: "Account for refund (IBAN)" } },
+    ],
+    build(v, lang) {
+      if (lang === "en") {
+        return `${senderBlock(v, lang)}
+
+${dateLine(lang)}
+
+${recipientBlock(v.landlord, v.landlordAddress, lang)}
+
+Subject: Return of security deposit — ${val(v.rental, "[property]")}
+
+Dear ${val(v.landlord, "[landlord]")},
+
+I vacated the property at ${val(v.rental, "[property address]")} on ${val(v.moveOut, "[date]")}, returning it in good condition allowing for normal wear and tear.
+
+To date the security deposit of ${money(v.deposit)} has not been returned to me. I hereby request its full return within 14 days of receipt of this letter${v.bankAccount ? `, by transfer to account ${v.bankAccount}` : ""}.
+
+If you intend to make any deduction, you must provide an itemised, evidenced breakdown; otherwise the full amount is due. Should the deposit not be returned within the stated period, I will initiate legal proceedings to recover it together with statutory interest and costs.
+
+${signOff(v, lang)}`;
+      }
+      return `${senderBlock(v, lang)}
+
+${dateLine(lang)}
+
+${recipientBlock(v.landlord, v.landlordAddress, lang)}
+
+Asunto: Devolución de fianza — ${val(v.rental, "[vivienda]")}
+
+Estimado/a ${val(v.landlord, "[arrendador]")}:
+
+El día ${val(v.moveOut, "[fecha]")} dejé la vivienda sita en ${val(v.rental, "[dirección]")}, entregándola en buen estado salvo el desgaste normal por el uso.
+
+A día de hoy no se me ha devuelto la fianza por importe de ${money(v.deposit)}. Por la presente RECLAMO su devolución íntegra en el plazo de 14 días desde la recepción de este escrito${v.bankAccount ? `, mediante transferencia a la cuenta ${v.bankAccount}` : ""}.
+
+Si pretende practicar alguna deducción, deberá justificarla de forma detallada y documentada; en caso contrario procede la devolución total. De no devolverse la fianza en el plazo indicado, iniciaré las acciones legales oportunas para su reclamación, junto con los intereses legales y las costas.
+
+${signOff(v, lang)}`;
+    },
+  },
+
+  {
+    id: "reparaciones-arrendador",
+    category: "vivienda",
+    icon: "🚿",
+    title: { es: "Exigir reparaciones al arrendador", en: "Demand repairs from your landlord" },
+    desc: { es: "Requerimiento formal para que el propietario realice reparaciones necesarias para la habitabilidad.", en: "Formal demand for the landlord to carry out repairs needed for habitability." },
+    juris: { es: "El arrendador suele estar obligado a mantener la vivienda en condiciones de uso. Algunos defectos permiten retener renta o resolver el contrato.", en: "Landlords are generally required to keep the home habitable. Some defects may allow rent withholding or lease termination." },
+    tips: {
+      es: ["Detalla cada desperfecto y su impacto.", "Fija un plazo razonable.", "Avisa de que documentarás el estado."],
+      en: ["List each defect and its impact.", "Set a reasonable deadline.", "Note that you will document the condition."],
+    },
+    nextSteps: {
+      es: ["Envía con acuse de recibo.", "Documenta con fotos y fechas.", "Si no actúa, consulta opciones de reparación a su cargo o reclamación."],
+      en: ["Send with proof of receipt.", "Document with photos and dates.", "If ignored, explore repair-and-deduct or legal action."],
+    },
+    fields: [
+      { name: "fullName", type: "text", req: true, label: { es: "Tu nombre completo", en: "Your full name" } },
+      { name: "address", type: "textarea", label: { es: "Tu dirección (la vivienda)", en: "Your address (the property)" } },
+      { name: "email", type: "email", label: { es: "Tu email", en: "Your email" } },
+      { name: "phone", type: "tel", label: { es: "Tu teléfono", en: "Your phone" } },
+      { name: "landlord", type: "text", req: true, label: { es: "Nombre del arrendador", en: "Landlord's name" } },
+      { name: "landlordAddress", type: "textarea", label: { es: "Dirección del arrendador", en: "Landlord's address" } },
+      { name: "issues", type: "textarea", req: true, label: { es: "Reparaciones necesarias", en: "Repairs needed" } },
+      { name: "reportedDate", type: "date", label: { es: "Fecha del primer aviso (si lo hubo)", en: "Date first reported (if any)" } },
+      { name: "deadlineDays", type: "number", label: { es: "Plazo que concedes (días)", en: "Deadline you grant (days)" } },
+    ],
+    build(v, lang) {
+      const days = val(v.deadlineDays, "14");
+      if (lang === "en") {
+        return `${senderBlock(v, lang)}
+
+${dateLine(lang)}
+
+${recipientBlock(v.landlord, v.landlordAddress, lang)}
+
+Subject: Request for repairs — ${val(v.address, "[property]")}
+
+Dear ${val(v.landlord, "[landlord]")},
+
+As tenant of the property indicated above, I formally notify you of the following defects requiring repair:
+
+${val(v.issues, "[list the repairs needed]")}
+${v.reportedDate ? `\nThese were first reported on ${v.reportedDate} and remain unresolved.\n` : ""}
+These conditions affect the proper use and habitability of the dwelling. I request that the necessary repairs be carried out within ${days} days of receipt of this letter.
+
+Failing that, I reserve the right to exercise all legal remedies available to me, which may include arranging the repairs and deducting their cost, requesting a rent reduction, or terminating the lease, in addition to claiming any damages caused.
+
+${signOff(v, lang)}`;
+      }
+      return `${senderBlock(v, lang)}
+
+${dateLine(lang)}
+
+${recipientBlock(v.landlord, v.landlordAddress, lang)}
+
+Asunto: Requerimiento de reparaciones — ${val(v.address, "[vivienda]")}
+
+Estimado/a ${val(v.landlord, "[arrendador]")}:
+
+Como arrendatario/a de la vivienda indicada, le comunico formalmente los siguientes desperfectos que precisan reparación:
+
+${val(v.issues, "[detalle las reparaciones]")}
+${v.reportedDate ? `\nFueron comunicados por primera vez el ${v.reportedDate} sin que se hayan resuelto.\n` : ""}
+Estas deficiencias afectan al uso adecuado y a la habitabilidad de la vivienda. Le REQUIERO para que ejecute las reparaciones necesarias en el plazo de ${days} días desde la recepción de este escrito.
+
+En su defecto, me reservo el derecho de ejercer cuantas acciones legales me asistan, que podrán incluir realizar las reparaciones a su cargo, solicitar una reducción de la renta o instar la resolución del contrato, además de reclamar los daños y perjuicios ocasionados.
+
+${signOff(v, lang)}`;
+    },
+  },
+
+  /* ===================== TRANSPORTE ===================== */
+  {
+    id: "multa-trafico",
+    category: "transporte",
+    icon: "🅿️",
+    title: { es: "Recurrir una multa de tráfico o aparcamiento", en: "Appeal a traffic or parking ticket" },
+    desc: { es: "Escrito de alegaciones para impugnar una sanción de tráfico o estacionamiento.", en: "Written appeal to challenge a traffic or parking penalty." },
+    juris: { es: "Los plazos para alegar son cortos (a menudo 15-20 días). Revisa el reverso de la notificación.", en: "Appeal windows are short (often 15-30 days). Check the back of the notice." },
+    tips: {
+      es: ["Identifica vicios de forma (señalización, notificación, datos erróneos).", "Adjunta fotos y pruebas.", "Solicita el pronto pago solo si renuncias a recurrir."],
+      en: ["Identify procedural defects (signage, notice, wrong data).", "Attach photos and evidence.", "Beware: early payment usually waives your appeal."],
+    },
+    nextSteps: {
+      es: ["Presenta dentro del plazo por registro o sede electrónica.", "Guarda el justificante de presentación.", "Si desestiman, valora el recurso de alzada o contencioso."],
+      en: ["File within the deadline through the proper channel.", "Keep proof of filing.", "If rejected, consider the next level of appeal."],
+    },
+    fields: [
+      { name: "fullName", type: "text", req: true, label: { es: "Tu nombre completo", en: "Your full name" } },
+      { name: "idNumber", type: "text", label: { es: "DNI / documento de identidad", en: "ID number" } },
+      { name: "address", type: "textarea", req: true, label: { es: "Tu dirección", en: "Your address" } },
+      { name: "authority", type: "text", req: true, label: { es: "Organismo sancionador (ayuntamiento, DGT...)", en: "Issuing authority" } },
+      { name: "ticketNumber", type: "text", req: true, label: { es: "Nº de expediente / boletín", en: "Ticket / file number" } },
+      { name: "plate", type: "text", label: { es: "Matrícula del vehículo", en: "Vehicle plate" } },
+      { name: "ticketDate", type: "date", req: true, label: { es: "Fecha de la denuncia", en: "Date of the ticket" } },
+      { name: "amount", type: "money", label: { es: "Importe de la multa", en: "Fine amount" } },
+      { name: "grounds", type: "textarea", req: true, label: { es: "Motivos de tu recurso", en: "Grounds for your appeal" } },
+    ],
+    build(v, lang) {
+      if (lang === "en") {
+        return `${val(v.fullName, "[Your full name]")}${v.idNumber ? `, ID ${v.idNumber}` : ""}
+${val(v.address, "[Your address]")}
+
+${dateLine(lang)}
+
+To: ${val(v.authority, "[issuing authority]")}
+
+Subject: Appeal against penalty — File no. ${val(v.ticketNumber, "[file no.]")}
+
+To whom it may concern,
+
+I, the undersigned, having received notice of the penalty referenced above${v.plate ? `, concerning vehicle with plate ${v.plate}` : ""}, dated ${val(v.ticketDate, "[date]")}${v.amount ? ` for the amount of ${money(v.amount)}` : ""}, hereby submit the following ALLEGATIONS in time and form:
+
+${val(v.grounds, "[set out your grounds]")}
+
+For the foregoing reasons, I respectfully REQUEST that this appeal be admitted, the proceedings reviewed and the penalty annulled, with all consequent legal effects. I request to be notified of the resolution at the address stated above.
+
+I attach the supporting evidence referred to herein.
+
+${val(v.fullName, "[Your full name]")}
+(Signature)`;
+      }
+      return `${val(v.fullName, "[Tu nombre completo]")}${v.idNumber ? `, DNI ${v.idNumber}` : ""}
+${val(v.address, "[Tu dirección]")}
+
+${dateLine(lang)}
+
+A LA ATENCIÓN DE: ${val(v.authority, "[organismo]")}
+
+Asunto: Alegaciones / recurso contra sanción — Expediente nº ${val(v.ticketNumber, "[expediente]")}
+
+Por medio del presente escrito, el abajo firmante, habiendo recibido notificación de la denuncia de referencia${v.plate ? `, relativa al vehículo con matrícula ${v.plate}` : ""}, de fecha ${val(v.ticketDate, "[fecha]")}${v.amount ? ` y por importe de ${money(v.amount)}` : ""}, formula en tiempo y forma las siguientes ALEGACIONES:
+
+${val(v.grounds, "[exponga sus motivos]")}
+
+Por lo expuesto, SOLICITO que se tengan por presentadas estas alegaciones, se revise el expediente y se acuerde el archivo y la anulación de la sanción, con los efectos legales que correspondan. Solicito ser notificado de la resolución en el domicilio indicado.
+
+Acompaño la documentación acreditativa a la que hago referencia.
+
+${val(v.fullName, "[Tu nombre completo]")}
+(Firma)`;
+    },
+  },
+
+  {
+    id: "compensacion-vuelo",
+    category: "transporte",
+    icon: "✈️",
+    title: { es: "Compensación por vuelo retrasado o cancelado", en: "Compensation for a delayed or cancelled flight" },
+    desc: { es: "Reclama a la aerolínea la compensación y gastos por retraso, cancelación o denegación de embarque.", en: "Claim compensation and expenses from the airline for delay, cancellation or denied boarding." },
+    juris: { es: "En la UE, el Reglamento (CE) 261/2004 da hasta 600€ según distancia. En otros países revisa la normativa local del transportista.", en: "In the EU, Regulation 261/2004 grants up to €600 by distance. Elsewhere, check the carrier's local rules." },
+    tips: {
+      es: ["Indica la causa del retraso si la conoces.", "Conserva tarjetas de embarque y gastos.", "Reclama también comida, hotel y transporte si procede."],
+      en: ["State the cause of delay if known.", "Keep boarding passes and expense receipts.", "Also claim meals, hotel and transport if applicable."],
+    },
+    nextSteps: {
+      es: ["Envía a atención al cliente de la aerolínea.", "Si no responden en 1 mes, acude al organismo nacional (AESA en España).", "Valora plataformas de reclamación si lo prefieres."],
+      en: ["Send to the airline's customer service.", "If unanswered in a month, escalate to the national authority.", "Consider claim platforms if preferred."],
+    },
+    fields: [
+      { name: "fullName", type: "text", req: true, label: { es: "Tu nombre completo", en: "Your full name" } },
+      { name: "address", type: "textarea", label: { es: "Tu dirección", en: "Your address" } },
+      { name: "email", type: "email", label: { es: "Tu email", en: "Your email" } },
+      { name: "airline", type: "text", req: true, label: { es: "Aerolínea", en: "Airline" } },
+      { name: "flightNumber", type: "text", req: true, label: { es: "Nº de vuelo", en: "Flight number" } },
+      { name: "flightDate", type: "date", req: true, label: { es: "Fecha del vuelo", en: "Flight date" } },
+      { name: "route", type: "text", req: true, label: { es: "Ruta (origen → destino)", en: "Route (from → to)" } },
+      { name: "bookingRef", type: "text", label: { es: "Localizador de reserva", en: "Booking reference" } },
+      { name: "incident", type: "select", req: true, label: { es: "Tipo de incidencia", en: "Type of incident" },
+        options: [
+          { value: "retraso", label: { es: "Retraso (3h o más)", en: "Delay (3h+)" } },
+          { value: "cancelacion", label: { es: "Cancelación", en: "Cancellation" } },
+          { value: "overbooking", label: { es: "Denegación de embarque", en: "Denied boarding" } },
+        ] },
+      { name: "delayHours", type: "number", label: { es: "Horas de retraso en destino", en: "Hours delayed at arrival" } },
+      { name: "expenses", type: "money", label: { es: "Gastos extra asumidos", en: "Extra expenses incurred" } },
+    ],
+    build(v, lang) {
+      const inc = {
+        retraso: { es: "un retraso", en: "a delay" },
+        cancelacion: { es: "la cancelación", en: "the cancellation" },
+        overbooking: { es: "una denegación de embarque", en: "denied boarding" },
+      }[v.incident] || { es: "una incidencia", en: "an incident" };
+
+      if (lang === "en") {
+        return `${senderBlock(v, lang)}
+
+${dateLine(lang)}
+
+To: ${val(v.airline, "[airline]")} — Customer Relations
+
+Subject: Compensation claim — Flight ${val(v.flightNumber, "[flight]")}, ${val(v.flightDate, "[date]")}${v.bookingRef ? ` (Booking ${v.bookingRef})` : ""}
+
+Dear Sir or Madam,
+
+I was a confirmed passenger on flight ${val(v.flightNumber, "[flight]")} (${val(v.route, "[route]")}) scheduled for ${val(v.flightDate, "[date]")}. The flight was affected by ${inc.en}${v.delayHours ? `, resulting in an arrival delay of ${v.delayHours} hours` : ""}.
+
+Under the applicable air-passenger rights legislation (in the EU, Regulation (EC) No 261/2004), I am entitled to financial compensation according to the distance of the flight, as well as reimbursement of reasonable expenses${v.expenses ? ` (in my case ${money(v.expenses)})` : ""}.
+
+I therefore claim the corresponding standardised compensation and the refund of my expenses, to be paid within 14 days. Please confirm the amount and the payment method.
+
+Unless the airline can prove extraordinary circumstances that could not have been avoided, the compensation is due in full.
+
+${signOff(v, lang)}`;
+      }
+      return `${senderBlock(v, lang)}
+
+${dateLine(lang)}
+
+A LA ATENCIÓN DE: ${val(v.airline, "[aerolínea]")} — Atención al cliente
+
+Asunto: Reclamación de compensación — Vuelo ${val(v.flightNumber, "[vuelo]")}, ${val(v.flightDate, "[fecha]")}${v.bookingRef ? ` (Localizador ${v.bookingRef})` : ""}
+
+Estimados señores:
+
+Era pasajero/a con reserva confirmada en el vuelo ${val(v.flightNumber, "[vuelo]")} (${val(v.route, "[ruta]")}) previsto para el ${val(v.flightDate, "[fecha]")}. El vuelo se vio afectado por ${inc.es}${v.delayHours ? `, con un retraso en la llegada de ${v.delayHours} horas` : ""}.
+
+Conforme a la normativa de derechos de los pasajeros aéreos (en la UE, el Reglamento (CE) nº 261/2004), me corresponde una compensación económica en función de la distancia del vuelo, así como el reembolso de los gastos razonables${v.expenses ? ` (en mi caso ${money(v.expenses)})` : ""}.
+
+Por ello, RECLAMO la compensación estandarizada que proceda y el reembolso de mis gastos, a abonar en el plazo de 14 días. Le ruego me confirme el importe y la forma de pago.
+
+Salvo que la aerolínea acredite circunstancias extraordinarias que no pudieran evitarse, la compensación es plenamente exigible.
+
+${signOff(v, lang)}`;
+    },
+  },
+
+
+  /* ===================== FINANZAS ===================== */
+  {
+    id: "contracargo-banco",
+    category: "finanzas",
+    icon: "💳",
+    title: { es: "Solicitar un contracargo (chargeback)", en: "Request a chargeback" },
+    desc: { es: "Disputa un cargo no reconocido, duplicado o por un servicio no prestado ante tu banco o emisor de la tarjeta.", en: "Dispute an unrecognized, duplicate or undelivered charge with your bank or card issuer." },
+    juris: { es: "Los plazos de disputa suelen ser de 60-120 días desde el cargo. Las reglas dependen de Visa/Mastercard y tu banco.", en: "Dispute windows are typically 60-120 days. Rules depend on Visa/Mastercard and your bank." },
+    tips: {
+      es: ["Indica si intentaste resolverlo con el comercio.", "Adjunta el extracto con el cargo señalado.", "Pide el bloqueo de cargos futuros si es fraude."],
+      en: ["State whether you tried to resolve it with the merchant.", "Attach the statement with the charge highlighted.", "Ask to block future charges if it is fraud."],
+    },
+    nextSteps: {
+      es: ["Presenta la disputa por escrito y guarda el número de caso.", "Aporta pruebas si el banco las pide.", "Vigila el abono provisional y la resolución."],
+      en: ["File the dispute in writing and keep the case number.", "Provide evidence if the bank asks.", "Watch for provisional credit and the final decision."],
+    },
+    fields: [
+      { name: "fullName", type: "text", req: true, label: { es: "Tu nombre completo", en: "Your full name" } },
+      { name: "address", type: "textarea", label: { es: "Tu dirección", en: "Your address" } },
+      { name: "email", type: "email", label: { es: "Tu email", en: "Your email" } },
+      { name: "bank", type: "text", req: true, label: { es: "Banco / emisor de la tarjeta", en: "Bank / card issuer" } },
+      { name: "cardLast4", type: "text", req: true, label: { es: "Últimos 4 dígitos de la tarjeta", en: "Last 4 digits of card" } },
+      { name: "merchant", type: "text", req: true, label: { es: "Comercio del cargo", en: "Merchant" } },
+      { name: "chargeDate", type: "date", req: true, label: { es: "Fecha del cargo", en: "Charge date" } },
+      { name: "amount", type: "money", req: true, label: { es: "Importe del cargo", en: "Charge amount" } },
+      { name: "reason", type: "select", req: true, label: { es: "Motivo de la disputa", en: "Reason for dispute" },
+        options: [
+          { value: "fraude", label: { es: "Cargo no reconocido / fraude", en: "Unrecognized / fraud" } },
+          { value: "duplicado", label: { es: "Cargo duplicado", en: "Duplicate charge" } },
+          { value: "no-recibido", label: { es: "Producto/servicio no recibido", en: "Goods/services not received" } },
+          { value: "no-cancelado", label: { es: "Suscripción ya cancelada", en: "Already-cancelled subscription" } },
+        ] },
+      { name: "details", type: "textarea", label: { es: "Detalles adicionales", en: "Additional details" } },
+    ],
+    build(v, lang) {
+      const reason = {
+        fraude: { es: "no reconozco el cargo y considero que es fraudulento", en: "I do not recognize the charge and believe it to be fraudulent" },
+        duplicado: { es: "se trata de un cargo duplicado por una misma operación", en: "this is a duplicate charge for a single transaction" },
+        "no-recibido": { es: "no he recibido el producto o servicio abonado", en: "I did not receive the goods or services paid for" },
+        "no-cancelado": { es: "corresponde a una suscripción que ya había cancelado", en: "it relates to a subscription I had already cancelled" },
+      }[v.reason] || { es: "el cargo es incorrecto", en: "the charge is incorrect" };
+
+      if (lang === "en") {
+        return `${senderBlock(v, lang)}
+
+${dateLine(lang)}
+
+To: ${val(v.bank, "[bank]")} — Disputes Department
+
+Subject: Chargeback request — card ending ${val(v.cardLast4, "[####]")}
+
+Dear Sir or Madam,
+
+I wish to formally dispute the following charge on my card ending in ${val(v.cardLast4, "[####]")}:
+
+• Merchant: ${val(v.merchant, "[merchant]")}
+• Date: ${val(v.chargeDate, "[date]")}
+• Amount: ${money(v.amount)}
+
+The reason for the dispute is that ${reason.en}.
+${v.details ? `\nAdditional details: ${v.details}\n` : ""}
+I therefore request that you initiate a chargeback, reverse the transaction and credit my account for the disputed amount, in accordance with the applicable card-scheme rules and consumer-protection law. ${v.reason === "fraude" ? "As this may be fraud, I also request that my card be secured against further unauthorized charges." : ""}
+
+Please confirm the case reference and the expected resolution date.
+
+${signOff(v, lang)}`;
+      }
+      return `${senderBlock(v, lang)}
+
+${dateLine(lang)}
+
+A LA ATENCIÓN DE: ${val(v.bank, "[banco]")} — Departamento de incidencias
+
+Asunto: Solicitud de contracargo — tarjeta terminada en ${val(v.cardLast4, "[####]")}
+
+Estimados señores:
+
+Deseo DISPUTAR formalmente el siguiente cargo en mi tarjeta terminada en ${val(v.cardLast4, "[####]")}:
+
+• Comercio: ${val(v.merchant, "[comercio]")}
+• Fecha: ${val(v.chargeDate, "[fecha]")}
+• Importe: ${money(v.amount)}
+
+El motivo de la disputa es que ${reason.es}.
+${v.details ? `\nDetalles adicionales: ${v.details}\n` : ""}
+Por lo anterior, SOLICITO que inicien el procedimiento de contracargo, revoquen la operación y abonen en mi cuenta el importe disputado, conforme a las reglas de la red de tarjetas y a la normativa de protección al consumidor. ${v.reason === "fraude" ? "Al poder tratarse de un fraude, solicito además que se proteja mi tarjeta frente a nuevos cargos no autorizados." : ""}
+
+Le ruego me confirme el número de caso y la fecha prevista de resolución.
+
+${signOff(v, lang)}`;
+    },
+  },
+
+  {
+    id: "validacion-deuda",
+    category: "finanzas",
+    icon: "📨",
+    title: { es: "Disputar / pedir validación de una deuda", en: "Dispute / request validation of a debt" },
+    desc: { es: "Obliga a una empresa de cobros a demostrar que la deuda es tuya y es exigible antes de pagar.", en: "Force a debt collector to prove the debt is yours and valid before you pay." },
+    juris: { es: "En EE. UU. el FDCPA da derecho a validación en 30 días. En la UE puedes exigir prueba del crédito y oponerte a cobros indebidos.", en: "In the US, the FDCPA grants a 30-day validation right. In the EU you may demand proof and object to undue collection." },
+    tips: {
+      es: ["No reconozcas la deuda en el escrito.", "Exige documento original del crédito.", "Pide que dejen de contactarte salvo por escrito."],
+      en: ["Do not admit the debt in the letter.", "Demand the original credit document.", "Ask them to contact you only in writing."],
+    },
+    nextSteps: {
+      es: ["Envía con acuse y conserva copia.", "Si no validan, no pueden seguir cobrando.", "Denuncia prácticas abusivas ante el regulador."],
+      en: ["Send with proof and keep a copy.", "If they cannot validate, they must stop collecting.", "Report abusive practices to the regulator."],
+    },
+    fields: [
+      { name: "fullName", type: "text", req: true, label: { es: "Tu nombre completo", en: "Your full name" } },
+      { name: "address", type: "textarea", req: true, label: { es: "Tu dirección", en: "Your address" } },
+      { name: "collector", type: "text", req: true, label: { es: "Empresa de cobros", en: "Collection agency" } },
+      { name: "collectorAddress", type: "textarea", label: { es: "Dirección de la empresa", en: "Agency address" } },
+      { name: "refNumber", type: "text", req: true, label: { es: "Nº de referencia / expediente", en: "Reference / account no." } },
+      { name: "amount", type: "money", label: { es: "Importe reclamado", en: "Amount claimed" } },
+    ],
+    build(v, lang) {
+      if (lang === "en") {
+        return `${val(v.fullName, "[Your full name]")}
+${val(v.address, "[Your address]")}
+
+${dateLine(lang)}
+
+To: ${val(v.collector, "[collection agency]")}
+${val(v.collectorAddress, "[agency address]")}
+
+Subject: Debt validation request — Ref. ${val(v.refNumber, "[ref]")}
+
+Dear Sir or Madam,
+
+I am writing in response to your communication regarding an alleged debt (reference ${val(v.refNumber, "[ref]")}${v.amount ? `, amount ${money(v.amount)}` : ""}). This is not an acknowledgement of the debt.
+
+I dispute this debt and request that you provide written validation, including:
+1. The name and address of the original creditor.
+2. A copy of the original signed agreement or document giving rise to the debt.
+3. A detailed breakdown of the amount claimed, including any interest and fees.
+4. Evidence that you are legally entitled to collect this debt.
+
+Until you provide this validation, I require that you cease all collection activity. I further request that you contact me only in writing at the address above.
+
+${signOff(v, lang)}`;
+      }
+      return `${val(v.fullName, "[Tu nombre completo]")}
+${val(v.address, "[Tu dirección]")}
+
+${dateLine(lang)}
+
+A LA ATENCIÓN DE: ${val(v.collector, "[empresa de cobros]")}
+${val(v.collectorAddress, "[dirección]")}
+
+Asunto: Solicitud de validación de deuda — Ref. ${val(v.refNumber, "[ref]")}
+
+Estimados señores:
+
+En relación con su comunicación sobre una supuesta deuda (referencia ${val(v.refNumber, "[ref]")}${v.amount ? `, importe ${money(v.amount)}` : ""}), les manifiesto que este escrito NO supone reconocimiento alguno de la deuda.
+
+OPONGO la deuda y les requiero que aporten validación por escrito, incluyendo:
+1. Nombre y dirección del acreedor original.
+2. Copia del contrato o documento firmado que origina la deuda.
+3. Desglose detallado del importe reclamado, con intereses y comisiones.
+4. Acreditación de que están legitimados para cobrar esta deuda.
+
+Hasta que aporten dicha validación, les requiero que CESEN toda actividad de cobro. Asimismo, solicito que se comuniquen conmigo únicamente por escrito en la dirección indicada.
+
+${signOff(v, lang)}`;
+    },
+  },
+
+  {
+    id: "disputa-credito",
+    category: "finanzas",
+    icon: "📊",
+    title: { es: "Corregir un error en tu informe de crédito", en: "Fix an error on your credit report" },
+    desc: { es: "Solicita la rectificación o eliminación de datos incorrectos en un fichero de solvencia (ASNEF, buró de crédito).", en: "Request correction or deletion of inaccurate data in a credit file." },
+    juris: { es: "Tienes derecho a rectificación de datos inexactos (RGPD en la UE; FCRA en EE. UU.). Los ficheros deben investigar en plazo.", en: "You have a right to correct inaccurate data (GDPR in the EU; FCRA in the US). Bureaus must investigate within a deadline." },
+    tips: {
+      es: ["Identifica exactamente el dato erróneo.", "Adjunta prueba de pago o del error.", "Pide notificación del resultado."],
+      en: ["Pinpoint exactly the wrong entry.", "Attach proof of payment or of the error.", "Ask to be notified of the outcome."],
+    },
+    nextSteps: {
+      es: ["Envía a la entidad de crédito y al acreedor.", "Si no corrigen, reclama ante la autoridad de datos.", "Vuelve a comprobar tu informe tras la corrección."],
+      en: ["Send to the bureau and the data furnisher.", "If not fixed, complain to the data authority.", "Re-check your report after correction."],
+    },
+    fields: [
+      { name: "fullName", type: "text", req: true, label: { es: "Tu nombre completo", en: "Your full name" } },
+      { name: "idNumber", type: "text", label: { es: "DNI / identificación", en: "ID number" } },
+      { name: "address", type: "textarea", req: true, label: { es: "Tu dirección", en: "Your address" } },
+      { name: "bureau", type: "text", req: true, label: { es: "Fichero / agencia de crédito", en: "Credit bureau" } },
+      { name: "creditor", type: "text", label: { es: "Acreedor que reporta el dato", en: "Creditor reporting the entry" } },
+      { name: "wrongEntry", type: "textarea", req: true, label: { es: "Dato incorrecto a corregir", en: "Inaccurate entry to fix" } },
+      { name: "correctInfo", type: "textarea", label: { es: "Información correcta", en: "Correct information" } },
+    ],
+    build(v, lang) {
+      if (lang === "en") {
+        return `${val(v.fullName, "[Your full name]")}${v.idNumber ? `, ID ${v.idNumber}` : ""}
+${val(v.address, "[Your address]")}
+
+${dateLine(lang)}
+
+To: ${val(v.bureau, "[credit bureau]")}
+
+Subject: Dispute of inaccurate credit information
+
+Dear Sir or Madam,
+
+I have identified the following inaccurate information in my credit file${v.creditor ? `, reported by ${v.creditor}` : ""}:
+
+${val(v.wrongEntry, "[describe the inaccurate entry]")}
+${v.correctInfo ? `\nThe correct information is:\n${v.correctInfo}\n` : ""}
+Under the applicable data-protection and fair-credit legislation, I request that you investigate this matter and correct or delete the inaccurate data, and that you notify any party to whom the data was disclosed. I attach supporting evidence.
+
+Please confirm in writing the outcome of your investigation within the statutory period.
+
+${signOff(v, lang)}`;
+      }
+      return `${val(v.fullName, "[Tu nombre completo]")}${v.idNumber ? `, DNI ${v.idNumber}` : ""}
+${val(v.address, "[Tu dirección]")}
+
+${dateLine(lang)}
+
+A LA ATENCIÓN DE: ${val(v.bureau, "[fichero de crédito]")}
+
+Asunto: Rectificación de información crediticia inexacta
+
+Estimados señores:
+
+He detectado la siguiente información inexacta en mi fichero de solvencia${v.creditor ? `, comunicada por ${v.creditor}` : ""}:
+
+${val(v.wrongEntry, "[describa el dato inexacto]")}
+${v.correctInfo ? `\nLa información correcta es:\n${v.correctInfo}\n` : ""}
+Conforme a la normativa de protección de datos y de información crediticia, SOLICITO que investiguen este asunto y rectifiquen o supriman el dato inexacto, así como que lo notifiquen a quienes se hubiera comunicado dicha información. Adjunto la documentación acreditativa.
+
+Le ruego confirme por escrito el resultado de la investigación dentro del plazo legal.
+
+${signOff(v, lang)}`;
+    },
+  },
+
+  {
+    id: "factura-medica",
+    category: "finanzas",
+    icon: "🏥",
+    title: { es: "Disputar o negociar una factura médica", en: "Dispute or negotiate a medical bill" },
+    desc: { es: "Cuestiona cargos incorrectos, pide desglose detallado o negocia un descuento o plan de pago.", en: "Challenge incorrect charges, request an itemized bill, or negotiate a discount or payment plan." },
+    juris: { es: "Puedes exigir factura detallada y revisar conceptos duplicados. En algunos sistemas existe protección frente a facturas sorpresa.", en: "You can request an itemized bill and review duplicate items. Some systems protect against surprise bills." },
+    tips: {
+      es: ["Pide la factura desglosada por código.", "Compara con lo cubierto por tu seguro.", "Propón un importe o plan realista."],
+      en: ["Request an itemized bill by code.", "Compare with what your insurer covers.", "Propose a realistic amount or plan."],
+    },
+    nextSteps: {
+      es: ["Envía la disputa y pausa el pago del importe discutido.", "Solicita revisión y respuesta por escrito.", "Si procede, pide ayuda financiera del centro."],
+      en: ["Send the dispute and hold payment of the disputed part.", "Request a review and written reply.", "If eligible, ask about financial assistance."],
+    },
+    fields: [
+      { name: "fullName", type: "text", req: true, label: { es: "Tu nombre completo", en: "Your full name" } },
+      { name: "address", type: "textarea", label: { es: "Tu dirección", en: "Your address" } },
+      { name: "patientId", type: "text", label: { es: "Nº de paciente / historia", en: "Patient / account no." } },
+      { name: "provider", type: "text", req: true, label: { es: "Centro / proveedor médico", en: "Provider / clinic" } },
+      { name: "invoiceNumber", type: "text", req: true, label: { es: "Nº de factura", en: "Invoice number" } },
+      { name: "amount", type: "money", label: { es: "Importe en disputa", en: "Amount in dispute" } },
+      { name: "issue", type: "textarea", req: true, label: { es: "Qué quieres disputar o negociar", en: "What you want to dispute or negotiate" } },
+    ],
+    build(v, lang) {
+      if (lang === "en") {
+        return `${senderBlock(v, lang)}
+
+${dateLine(lang)}
+
+To: ${val(v.provider, "[provider]")} — Billing Department
+
+Subject: Dispute of medical bill — Invoice ${val(v.invoiceNumber, "[invoice]")}${v.patientId ? `, Patient ${v.patientId}` : ""}
+
+Dear Sir or Madam,
+
+I am writing regarding invoice ${val(v.invoiceNumber, "[invoice]")}${v.amount ? ` in the amount of ${money(v.amount)}` : ""}. After reviewing it, I wish to raise the following:
+
+${val(v.issue, "[describe the issue]")}
+
+I request a fully itemized statement of all charges (by service/procedure code) and a review of the disputed items. Pending this review, I respectfully ask that no late fees be applied and that the account not be referred to collections.
+
+If the balance is confirmed as correct, I am willing to discuss a reasonable discount or an affordable payment plan. Please respond in writing.
+
+${signOff(v, lang)}`;
+      }
+      return `${senderBlock(v, lang)}
+
+${dateLine(lang)}
+
+A LA ATENCIÓN DE: ${val(v.provider, "[centro médico]")} — Departamento de facturación
+
+Asunto: Disputa de factura médica — Factura ${val(v.invoiceNumber, "[factura]")}${v.patientId ? `, Paciente ${v.patientId}` : ""}
+
+Estimados señores:
+
+Me dirijo a ustedes en relación con la factura ${val(v.invoiceNumber, "[factura]")}${v.amount ? ` por importe de ${money(v.amount)}` : ""}. Tras revisarla, deseo plantear lo siguiente:
+
+${val(v.issue, "[describa el problema]")}
+
+SOLICITO una factura detallada de todos los conceptos (por código de servicio/procedimiento) y la revisión de los importes en disputa. Mientras dure dicha revisión, ruego que no se apliquen recargos por demora ni se remita el expediente a cobros.
+
+Si se confirma que el saldo es correcto, estoy dispuesto/a a estudiar un descuento razonable o un plan de pago asumible. Le ruego responda por escrito.
+
+${signOff(v, lang)}`;
+    },
+  },
+
+
+  /* ===================== PRIVACIDAD ===================== */
+  {
+    id: "acceso-datos",
+    category: "privacidad",
+    icon: "🗂️",
+    title: { es: "Solicitar acceso a tus datos personales", en: "Request access to your personal data" },
+    desc: { es: "Ejerce tu derecho de acceso para saber qué datos tiene una empresa sobre ti y cómo los usa.", en: "Exercise your right of access to learn what data a company holds about you and how it is used." },
+    juris: { es: "RGPD art. 15 (UE) y CCPA (California) obligan a responder, normalmente en 1 mes y de forma gratuita.", en: "GDPR art. 15 (EU) and CCPA (California) require a response, usually within a month and free of charge." },
+    tips: {
+      es: ["Identifícate para que verifiquen tu identidad.", "Pide también finalidades, plazos y destinatarios.", "Solicita el formato que prefieras."],
+      en: ["Identify yourself so they can verify you.", "Also ask for purposes, retention and recipients.", "Request your preferred format."],
+    },
+    nextSteps: {
+      es: ["Envía al delegado de protección de datos o a privacidad.", "Si no responden en plazo, reclama ante la autoridad de datos.", "Conserva la solicitud y la fecha."],
+      en: ["Send to the data protection officer or privacy team.", "If no reply in time, complain to the data authority.", "Keep the request and its date."],
+    },
+    fields: [
+      { name: "fullName", type: "text", req: true, label: { es: "Tu nombre completo", en: "Your full name" } },
+      { name: "idNumber", type: "text", label: { es: "DNI / identificación", en: "ID number" } },
+      { name: "address", type: "textarea", label: { es: "Tu dirección", en: "Your address" } },
+      { name: "email", type: "email", req: true, label: { es: "Tu email", en: "Your email" } },
+      { name: "company", type: "text", req: true, label: { es: "Empresa / responsable del tratamiento", en: "Company / data controller" } },
+      { name: "companyAddress", type: "textarea", label: { es: "Dirección de la empresa", en: "Company address" } },
+      { name: "details", type: "textarea", label: { es: "Datos concretos que te interesan (opcional)", en: "Specific data of interest (optional)" } },
+    ],
+    build(v, lang) {
+      if (lang === "en") {
+        return `${senderBlock(v, lang)}${v.idNumber ? `\nID: ${v.idNumber}` : ""}
+
+${dateLine(lang)}
+
+To: ${val(v.company, "[company]")} — Data Protection Officer
+${val(v.companyAddress, "")}
+
+Subject: Subject access request (right of access)
+
+Dear Sir or Madam,
+
+Under my right of access to personal data (Article 15 GDPR / applicable data-protection law), I request that you provide me with:
+
+1. Confirmation of whether you process personal data concerning me.
+2. A copy of all such personal data.
+3. The purposes of the processing.
+4. The categories of data and the recipients to whom it has been disclosed.
+5. The retention period and the source of the data, where not collected from me.
+${v.details ? `\nI am particularly interested in: ${v.details}\n` : ""}
+Please provide the information free of charge and within one month, in a commonly used electronic format sent to the email above. I attach proof of identity if required.
+
+${signOff(v, lang)}`;
+      }
+      return `${senderBlock(v, lang)}${v.idNumber ? `\nDNI: ${v.idNumber}` : ""}
+
+${dateLine(lang)}
+
+A LA ATENCIÓN DE: ${val(v.company, "[empresa]")} — Delegado de Protección de Datos
+${val(v.companyAddress, "")}
+
+Asunto: Ejercicio del derecho de acceso a datos personales
+
+Estimados señores:
+
+Al amparo de mi derecho de acceso a los datos personales (artículo 15 del RGPD y normativa aplicable), SOLICITO que me faciliten:
+
+1. Confirmación de si tratan datos personales que me conciernen.
+2. Una copia de todos esos datos personales.
+3. Las finalidades del tratamiento.
+4. Las categorías de datos y los destinatarios a los que se hayan comunicado.
+5. El plazo de conservación y el origen de los datos, cuando no se hayan obtenido de mí.
+${v.details ? `\nMe interesan especialmente: ${v.details}\n` : ""}
+Les ruego faciliten la información de forma gratuita y en el plazo de un mes, en formato electrónico de uso común al correo indicado. Adjunto acreditación de identidad si fuera necesaria.
+
+${signOff(v, lang)}`;
+    },
+  },
+
+  {
+    id: "supresion-datos",
+    category: "privacidad",
+    icon: "🧹",
+    title: { es: "Solicitar la eliminación de tus datos", en: "Request deletion of your data" },
+    desc: { es: "Ejerce el derecho de supresión («derecho al olvido») para que una empresa borre tus datos personales.", en: "Exercise the right to erasure ('right to be forgotten') so a company deletes your personal data." },
+    juris: { es: "RGPD art. 17 (UE) y CCPA permiten pedir el borrado, con algunas excepciones legales (obligaciones de conservación).", en: "GDPR art. 17 (EU) and CCPA allow deletion requests, with some legal exceptions (retention duties)." },
+    tips: {
+      es: ["Indica el motivo (ya no son necesarios, retiras consentimiento...).", "Pide confirmación del borrado.", "Solicita que lo comuniquen a terceros."],
+      en: ["State the reason (no longer needed, consent withdrawn...).", "Ask for confirmation of deletion.", "Ask them to notify third parties."],
+    },
+    nextSteps: {
+      es: ["Envía a privacidad / DPO.", "Si se niegan sin base legal, reclama a la autoridad.", "Verifica que dejas de recibir comunicaciones."],
+      en: ["Send to privacy / DPO.", "If refused without legal basis, complain to the authority.", "Verify communications stop."],
+    },
+    fields: [
+      { name: "fullName", type: "text", req: true, label: { es: "Tu nombre completo", en: "Your full name" } },
+      { name: "idNumber", type: "text", label: { es: "DNI / identificación", en: "ID number" } },
+      { name: "email", type: "email", req: true, label: { es: "Tu email", en: "Your email" } },
+      { name: "company", type: "text", req: true, label: { es: "Empresa / responsable", en: "Company / controller" } },
+      { name: "companyAddress", type: "textarea", label: { es: "Dirección de la empresa", en: "Company address" } },
+      { name: "reason", type: "textarea", label: { es: "Motivo de la solicitud (opcional)", en: "Reason for the request (optional)" } },
+    ],
+    build(v, lang) {
+      if (lang === "en") {
+        return `${val(v.fullName, "[Your full name]")}${v.idNumber ? `, ID ${v.idNumber}` : ""}
+${v.email ? `Email: ${v.email}` : ""}
+
+${dateLine(lang)}
+
+To: ${val(v.company, "[company]")} — Data Protection Officer
+${val(v.companyAddress, "")}
+
+Subject: Request for erasure of personal data (right to be forgotten)
+
+Dear Sir or Madam,
+
+Under Article 17 GDPR / applicable data-protection law, I request the erasure of all personal data you hold about me${v.reason ? `, for the following reason: ${v.reason}` : ""}.
+
+I also request that you:
+1. Confirm the deletion in writing.
+2. Communicate this request to any processors or third parties to whom the data was disclosed.
+3. Cease any further processing, including marketing, with immediate effect.
+
+If you believe a legal exception prevents deletion of part of the data, please specify which data and the precise legal basis. Please respond within one month.
+
+${signOff(v, lang)}`;
+      }
+      return `${val(v.fullName, "[Tu nombre completo]")}${v.idNumber ? `, DNI ${v.idNumber}` : ""}
+${v.email ? `Email: ${v.email}` : ""}
+
+${dateLine(lang)}
+
+A LA ATENCIÓN DE: ${val(v.company, "[empresa]")} — Delegado de Protección de Datos
+${val(v.companyAddress, "")}
+
+Asunto: Solicitud de supresión de datos personales (derecho al olvido)
+
+Estimados señores:
+
+Al amparo del artículo 17 del RGPD y normativa aplicable, SOLICITO la supresión de todos los datos personales que tengan sobre mí${v.reason ? `, por el siguiente motivo: ${v.reason}` : ""}.
+
+Asimismo, solicito que:
+1. Confirmen el borrado por escrito.
+2. Comuniquen esta solicitud a los encargados o terceros a quienes se hayan cedido los datos.
+3. Cesen cualquier tratamiento posterior, incluido el envío de comunicaciones comerciales, con efecto inmediato.
+
+Si consideran que una excepción legal impide suprimir parte de los datos, indiquen qué datos y la base jurídica concreta. Les ruego respondan en el plazo de un mes.
+
+${signOff(v, lang)}`;
+    },
+  },
+
+  /* ===================== TRABAJO ===================== */
+  {
+    id: "salarios-impagados",
+    category: "trabajo",
+    icon: "💶",
+    title: { es: "Reclamar salarios o nóminas impagadas", en: "Claim unpaid wages or salary" },
+    desc: { es: "Requiere a tu empleador el pago de salarios, horas extra o finiquito pendientes.", en: "Demand your employer pay outstanding wages, overtime or final settlement." },
+    juris: { es: "El impago salarial puede generar intereses por mora y, en algunos países, indemnización o extinción del contrato a instancia del trabajador.", en: "Unpaid wages can trigger interest and, in some countries, compensation or employee-initiated termination." },
+    tips: {
+      es: ["Detalla periodos e importes adeudados.", "Adjunta nóminas y contrato.", "Conserva pruebas de la jornada y horas extra."],
+      en: ["Detail the periods and amounts owed.", "Attach payslips and contract.", "Keep records of hours and overtime."],
+    },
+    nextSteps: {
+      es: ["Envía el requerimiento con acuse.", "Si no pagan, acude a inspección de trabajo o vía judicial.", "Valora la papeleta de conciliación previa si aplica."],
+      en: ["Send the demand with proof of receipt.", "If unpaid, go to the labor authority or court.", "Consider mandatory conciliation if it applies."],
+    },
+    fields: [
+      { name: "fullName", type: "text", req: true, label: { es: "Tu nombre completo", en: "Your full name" } },
+      { name: "idNumber", type: "text", label: { es: "DNI / identificación", en: "ID number" } },
+      { name: "address", type: "textarea", label: { es: "Tu dirección", en: "Your address" } },
+      { name: "employer", type: "text", req: true, label: { es: "Empresa / empleador", en: "Employer" } },
+      { name: "employerAddress", type: "textarea", label: { es: "Dirección de la empresa", en: "Employer address" } },
+      { name: "position", type: "text", label: { es: "Tu puesto", en: "Your position" } },
+      { name: "periods", type: "textarea", req: true, label: { es: "Periodos e importes impagados", en: "Unpaid periods and amounts" } },
+      { name: "totalAmount", type: "money", label: { es: "Total adeudado", en: "Total owed" } },
+      { name: "bankAccount", type: "text", label: { es: "Cuenta para el pago (IBAN)", en: "Account for payment (IBAN)" } },
+    ],
+    build(v, lang) {
+      if (lang === "en") {
+        return `${val(v.fullName, "[Your full name]")}${v.idNumber ? `, ID ${v.idNumber}` : ""}
+${val(v.address, "[Your address]")}
+
+${dateLine(lang)}
+
+To: ${val(v.employer, "[employer]")}
+${val(v.employerAddress, "")}
+
+Subject: Formal demand for payment of outstanding wages
+
+Dear Sir or Madam,
+
+As an employee of your company${v.position ? ` in the position of ${v.position}` : ""}, I hereby formally demand payment of the following outstanding wages:
+
+${val(v.periods, "[detail periods and amounts]")}
+${v.totalAmount ? `\nTotal amount owed: ${money(v.totalAmount)}\n` : ""}
+I require payment within 7 days of receipt of this letter${v.bankAccount ? `, by transfer to account ${v.bankAccount}` : ""}, together with any applicable interest for late payment.
+
+Should payment not be made within that period, I reserve the right to file a complaint with the labor authority and to bring a claim before the competent court, including any compensation to which I am entitled.
+
+${signOff(v, lang)}`;
+      }
+      return `${val(v.fullName, "[Tu nombre completo]")}${v.idNumber ? `, DNI ${v.idNumber}` : ""}
+${val(v.address, "[Tu dirección]")}
+
+${dateLine(lang)}
+
+A LA ATENCIÓN DE: ${val(v.employer, "[empresa]")}
+${val(v.employerAddress, "")}
+
+Asunto: Requerimiento formal de pago de salarios adeudados
+
+Estimados señores:
+
+Como trabajador/a de su empresa${v.position ? ` en el puesto de ${v.position}` : ""}, REQUIERO formalmente el pago de los siguientes salarios pendientes:
+
+${val(v.periods, "[detalle periodos e importes]")}
+${v.totalAmount ? `\nTotal adeudado: ${money(v.totalAmount)}\n` : ""}
+Solicito el abono en el plazo de 7 días desde la recepción de este escrito${v.bankAccount ? `, mediante transferencia a la cuenta ${v.bankAccount}` : ""}, junto con los intereses por mora que correspondan.
+
+De no producirse el pago en dicho plazo, me reservo el derecho de presentar denuncia ante la Inspección de Trabajo y de ejercer la reclamación judicial ante el juzgado competente, incluida la indemnización que en su caso me corresponda.
+
+${signOff(v, lang)}`;
+    },
+  },
+
+
+  /* ===================== TRÁMITES Y DISPUTAS ===================== */
+  {
+    id: "demanda-previa",
+    category: "tramites",
+    icon: "⚖️",
+    title: { es: "Carta de reclamación previa (demand letter)", en: "Letter before claim (demand letter)" },
+    desc: { es: "Último aviso formal antes de demandar: exige el pago o cumplimiento y anuncia acciones legales.", en: "Final formal notice before suing: demand payment or performance and announce legal action." },
+    juris: { es: "En muchos sistemas, una reclamación previa por escrito es recomendable o incluso obligatoria antes de acudir a juicio.", en: "In many systems a written letter before claim is advisable or even required before going to court." },
+    tips: {
+      es: ["Resume los hechos y la cantidad exacta.", "Fija un plazo claro (p. ej. 14 días).", "Anuncia que iniciarás acciones e incluirás costas."],
+      en: ["Summarize the facts and the exact amount.", "Set a clear deadline (e.g. 14 days).", "Announce you will sue and seek costs."],
+    },
+    nextSteps: {
+      es: ["Envía por medio fehaciente con acuse.", "Si no responden, presenta la demanda (a menudo en juzgado de pequeñas cuantías).", "Guarda esta carta como prueba del intento de acuerdo."],
+      en: ["Send by a traceable method with receipt.", "If ignored, file your claim (often small claims).", "Keep this letter as evidence you tried to settle."],
+    },
+    fields: [
+      { name: "fullName", type: "text", req: true, label: { es: "Tu nombre completo", en: "Your full name" } },
+      { name: "address", type: "textarea", label: { es: "Tu dirección", en: "Your address" } },
+      { name: "email", type: "email", label: { es: "Tu email", en: "Your email" } },
+      { name: "recipient", type: "text", req: true, label: { es: "Persona / empresa reclamada", en: "Person / company you claim against" } },
+      { name: "recipientAddress", type: "textarea", label: { es: "Su dirección", en: "Their address" } },
+      { name: "facts", type: "textarea", req: true, label: { es: "Hechos y antecedentes", en: "Facts and background" } },
+      { name: "amount", type: "money", label: { es: "Cantidad reclamada", en: "Amount claimed" } },
+      { name: "demand", type: "textarea", req: true, label: { es: "Qué exiges exactamente", en: "Exactly what you demand" } },
+      { name: "deadlineDays", type: "number", label: { es: "Plazo concedido (días)", en: "Deadline granted (days)" } },
+    ],
+    build(v, lang) {
+      const days = val(v.deadlineDays, "14");
+      if (lang === "en") {
+        return `${senderBlock(v, lang)}
+
+${dateLine(lang)}
+
+To: ${val(v.recipient, "[recipient]")}
+${val(v.recipientAddress, "")}
+
+Subject: Letter before claim — formal demand
+
+WITHOUT PREJUDICE SAVE AS TO COSTS
+
+Dear ${val(v.recipient, "[recipient]")},
+
+This letter constitutes a formal demand before the commencement of legal proceedings.
+
+Background and facts:
+${val(v.facts, "[set out the facts]")}
+
+Demand:
+${val(v.demand, "[state your demand]")}${v.amount ? `\n\nThe amount claimed is ${money(v.amount)}.` : ""}
+
+I require that you comply with this demand within ${days} days of receipt of this letter. If you fail to do so, I will commence legal proceedings without further notice, and will seek recovery of the amount due together with interest and the costs of the action.
+
+This letter is sent in a genuine attempt to resolve the matter amicably and will be relied upon before the court.
+
+${signOff(v, lang)}`;
+      }
+      return `${senderBlock(v, lang)}
+
+${dateLine(lang)}
+
+A LA ATENCIÓN DE: ${val(v.recipient, "[reclamado]")}
+${val(v.recipientAddress, "")}
+
+Asunto: Reclamación previa — requerimiento formal
+
+Estimado/a ${val(v.recipient, "[reclamado]")}:
+
+El presente escrito constituye una RECLAMACIÓN PREVIA formal con carácter previo al ejercicio de acciones judiciales.
+
+Antecedentes y hechos:
+${val(v.facts, "[exponga los hechos]")}
+
+Reclamación:
+${val(v.demand, "[indique su reclamación]")}${v.amount ? `\n\nLa cantidad reclamada asciende a ${money(v.amount)}.` : ""}
+
+Le REQUIERO para que dé cumplimiento a lo solicitado en el plazo de ${days} días desde la recepción de este escrito. De no hacerlo, iniciaré las acciones judiciales que correspondan sin más aviso, reclamando la cantidad debida junto con los intereses y las costas del procedimiento.
+
+Este escrito se remite con ánimo de resolver el asunto de forma amistosa y será aportado como prueba ante el órgano judicial.
+
+${signOff(v, lang)}`;
+    },
+  },
+
+  {
+    id: "cese-desista",
+    category: "tramites",
+    icon: "🛑",
+    title: { es: "Carta de cese y desista", en: "Cease and desist letter" },
+    desc: { es: "Exige a alguien que detenga una conducta ilícita: acoso, difamación, uso indebido de marca o impagos abusivos.", en: "Demand someone stop unlawful conduct: harassment, defamation, IP misuse or abusive collection." },
+    juris: { es: "Una carta de cese no es una orden judicial, pero deja constancia formal y suele frenar la conducta. Guarda copia.", en: "A cease-and-desist is not a court order, but it creates a formal record and often stops the conduct. Keep a copy." },
+    tips: {
+      es: ["Describe la conducta y por qué es ilícita.", "Exige que cese de inmediato.", "Advierte de acciones legales si continúa."],
+      en: ["Describe the conduct and why it's unlawful.", "Demand it stop immediately.", "Warn of legal action if it continues."],
+    },
+    nextSteps: {
+      es: ["Envía con acuse y conserva todo.", "Documenta cualquier conducta posterior.", "Si persiste, acude a la vía judicial o policial según el caso."],
+      en: ["Send with proof and keep everything.", "Document any further conduct.", "If it persists, pursue legal or police action as appropriate."],
+    },
+    fields: [
+      { name: "fullName", type: "text", req: true, label: { es: "Tu nombre completo", en: "Your full name" } },
+      { name: "address", type: "textarea", label: { es: "Tu dirección", en: "Your address" } },
+      { name: "recipient", type: "text", req: true, label: { es: "Persona / empresa destinataria", en: "Recipient person / company" } },
+      { name: "recipientAddress", type: "textarea", label: { es: "Su dirección", en: "Their address" } },
+      { name: "conduct", type: "textarea", req: true, label: { es: "Conducta que debe cesar", en: "Conduct that must stop" } },
+      { name: "deadlineDays", type: "number", label: { es: "Plazo para cesar (días)", en: "Deadline to stop (days)" } },
+    ],
+    build(v, lang) {
+      const days = val(v.deadlineDays, "7");
+      if (lang === "en") {
+        return `${senderBlock(v, lang)}
+
+${dateLine(lang)}
+
+To: ${val(v.recipient, "[recipient]")}
+${val(v.recipientAddress, "")}
+
+Subject: CEASE AND DESIST
+
+Dear ${val(v.recipient, "[recipient]")},
+
+I am writing to formally demand that you immediately CEASE AND DESIST from the following conduct:
+
+${val(v.conduct, "[describe the conduct]")}
+
+This conduct is unlawful and causes me harm. I demand that it stop completely within ${days} days of receipt of this letter and that it not be repeated.
+
+Be advised that if the conduct continues, I will pursue all available legal remedies, which may include a claim for an injunction and for damages, as well as reporting the matter to the competent authorities. This letter will be used as evidence that you were duly notified.
+
+${signOff(v, lang)}`;
+      }
+      return `${senderBlock(v, lang)}
+
+${dateLine(lang)}
+
+A LA ATENCIÓN DE: ${val(v.recipient, "[destinatario]")}
+${val(v.recipientAddress, "")}
+
+Asunto: REQUERIMIENTO DE CESE Y ABSTENCIÓN
+
+Estimado/a ${val(v.recipient, "[destinatario]")}:
+
+Por medio del presente le REQUIERO formalmente para que CESE de inmediato en la siguiente conducta:
+
+${val(v.conduct, "[describa la conducta]")}
+
+Dicha conducta es ilícita y me causa un perjuicio. Le exijo que cese por completo en el plazo de ${days} días desde la recepción de este escrito y que se abstenga de repetirla.
+
+Le advierto de que, de continuar, ejerceré cuantas acciones legales me asistan, que podrán incluir la solicitud de medidas de cesación y la reclamación de daños y perjuicios, así como la denuncia ante las autoridades competentes. Este escrito se utilizará como prueba de haberle requerido debidamente.
+
+${signOff(v, lang)}`;
+    },
+  },
+
+  {
+    id: "incumplimiento-contrato",
+    category: "tramites",
+    icon: "📜",
+    title: { es: "Reclamar por incumplimiento de contrato", en: "Claim for breach of contract" },
+    desc: { es: "Requiere a la otra parte que cumpla lo pactado o responda por los daños del incumplimiento.", en: "Demand the other party perform the contract or answer for the damages of the breach." },
+    juris: { es: "Frente a un incumplimiento puedes exigir cumplimiento, resolución y/o indemnización de daños y perjuicios.", en: "On breach you may demand performance, termination and/or damages." },
+    tips: {
+      es: ["Cita la cláusula incumplida.", "Concreta el daño sufrido.", "Indica si exiges cumplir o resolver."],
+      en: ["Cite the breached clause.", "Quantify the damage.", "State if you want performance or termination."],
+    },
+    nextSteps: {
+      es: ["Envía el requerimiento con acuse.", "Da plazo para subsanar.", "Si no cumple, valora resolución y demanda."],
+      en: ["Send the demand with proof.", "Give time to cure.", "If unmet, consider termination and suit."],
+    },
+    fields: [
+      { name: "fullName", type: "text", req: true, label: { es: "Tu nombre completo", en: "Your full name" } },
+      { name: "address", type: "textarea", label: { es: "Tu dirección", en: "Your address" } },
+      { name: "recipient", type: "text", req: true, label: { es: "Otra parte del contrato", en: "Other contracting party" } },
+      { name: "recipientAddress", type: "textarea", label: { es: "Su dirección", en: "Their address" } },
+      { name: "contractDesc", type: "text", req: true, label: { es: "Contrato (objeto y fecha)", en: "Contract (subject and date)" } },
+      { name: "breach", type: "textarea", req: true, label: { es: "En qué consiste el incumplimiento", en: "What the breach consists of" } },
+      { name: "remedy", type: "textarea", req: true, label: { es: "Qué exiges (cumplir, resolver, indemnizar)", en: "What you demand (perform, terminate, compensate)" } },
+      { name: "deadlineDays", type: "number", label: { es: "Plazo para subsanar (días)", en: "Deadline to cure (days)" } },
+    ],
+    build(v, lang) {
+      const days = val(v.deadlineDays, "15");
+      if (lang === "en") {
+        return `${senderBlock(v, lang)}
+
+${dateLine(lang)}
+
+To: ${val(v.recipient, "[other party]")}
+${val(v.recipientAddress, "")}
+
+Subject: Notice of breach of contract — ${val(v.contractDesc, "[contract]")}
+
+Dear ${val(v.recipient, "[other party]")},
+
+I refer to our contract (${val(v.contractDesc, "[subject and date]")}). You are in breach of its terms in the following respect:
+
+${val(v.breach, "[describe the breach]")}
+
+I hereby require you to remedy this breach within ${days} days of receipt of this letter. Specifically, I demand the following:
+
+${val(v.remedy, "[state your demand]")}
+
+If you fail to comply within the stated period, I will treat the contract as terminated by your breach where applicable and will pursue all legal remedies available, including a claim for damages, interest and costs.
+
+${signOff(v, lang)}`;
+      }
+      return `${senderBlock(v, lang)}
+
+${dateLine(lang)}
+
+A LA ATENCIÓN DE: ${val(v.recipient, "[otra parte]")}
+${val(v.recipientAddress, "")}
+
+Asunto: Requerimiento por incumplimiento de contrato — ${val(v.contractDesc, "[contrato]")}
+
+Estimado/a ${val(v.recipient, "[otra parte]")}:
+
+Me refiero al contrato suscrito entre ambas partes (${val(v.contractDesc, "[objeto y fecha]")}). Usted ha incumplido sus términos en lo siguiente:
+
+${val(v.breach, "[describa el incumplimiento]")}
+
+Por la presente le REQUIERO para que subsane dicho incumplimiento en el plazo de ${days} días desde la recepción de este escrito. En concreto, exijo lo siguiente:
+
+${val(v.remedy, "[indique su exigencia]")}
+
+De no cumplir en el plazo señalado, tendré el contrato por resuelto por su incumplimiento cuando proceda y ejerceré cuantas acciones legales me asistan, incluida la reclamación de daños y perjuicios, intereses y costas.
+
+${signOff(v, lang)}`;
+    },
+  },
+
+  {
+    id: "ruido-vecinos",
+    category: "tramites",
+    icon: "🔊",
+    title: { es: "Queja por ruidos o molestias del vecindario", en: "Complaint about neighbor noise or nuisance" },
+    desc: { es: "Requerimiento formal a un vecino o a la comunidad para que cesen ruidos o molestias reiteradas.", en: "Formal notice to a neighbor or association to stop recurring noise or nuisance." },
+    juris: { es: "Las actividades molestas pueden infringir ordenanzas locales y los estatutos de la comunidad. Documenta horarios y frecuencia.", en: "Nuisance can breach local ordinances and association rules. Document times and frequency." },
+    tips: {
+      es: ["Anota días, horas y tipo de molestia.", "Sé firme pero cordial.", "Menciona la normativa o estatutos si los conoces."],
+      en: ["Log dates, times and type of nuisance.", "Be firm but cordial.", "Mention rules or statutes if known."],
+    },
+    nextSteps: {
+      es: ["Entrega en mano o con acuse y guarda copia.", "Si persiste, avisa a la comunidad o al ayuntamiento.", "Como último recurso, denuncia o vía judicial."],
+      en: ["Deliver by hand or with receipt and keep a copy.", "If it persists, notify the association or city.", "As a last resort, report it or go to court."],
+    },
+    fields: [
+      { name: "fullName", type: "text", req: true, label: { es: "Tu nombre completo", en: "Your full name" } },
+      { name: "address", type: "textarea", req: true, label: { es: "Tu dirección", en: "Your address" } },
+      { name: "recipient", type: "text", req: true, label: { es: "Vecino / comunidad", en: "Neighbor / association" } },
+      { name: "recipientAddress", type: "textarea", label: { es: "Su dirección", en: "Their address" } },
+      { name: "nuisance", type: "textarea", req: true, label: { es: "Describe las molestias (días, horas, tipo)", en: "Describe the nuisance (days, times, type)" } },
+    ],
+    build(v, lang) {
+      if (lang === "en") {
+        return `${val(v.fullName, "[Your full name]")}
+${val(v.address, "[Your address]")}
+
+${dateLine(lang)}
+
+To: ${val(v.recipient, "[neighbor]")}
+${val(v.recipientAddress, "")}
+
+Subject: Request to stop noise / nuisance
+
+Dear neighbor,
+
+I am writing regarding a recurring nuisance affecting the peaceful enjoyment of my home:
+
+${val(v.nuisance, "[describe the nuisance]")}
+
+I kindly but firmly request that this conduct cease, as it disturbs normal coexistence and may breach local noise ordinances and the rules of our community.
+
+I would prefer to resolve this amicably. However, if the nuisance continues, I will be compelled to report it to the homeowners' association and the competent authorities, and to pursue any legal action available to protect my rights.
+
+Thank you for your understanding.
+
+${val(v.fullName, "[Your full name]")}`;
+      }
+      return `${val(v.fullName, "[Tu nombre completo]")}
+${val(v.address, "[Tu dirección]")}
+
+${dateLine(lang)}
+
+A LA ATENCIÓN DE: ${val(v.recipient, "[vecino]")}
+${val(v.recipientAddress, "")}
+
+Asunto: Requerimiento para el cese de ruidos / molestias
+
+Estimado/a vecino/a:
+
+Me dirijo a usted en relación con unas molestias reiteradas que afectan al disfrute pacífico de mi vivienda:
+
+${val(v.nuisance, "[describa las molestias]")}
+
+Le ruego, de forma cordial pero firme, que cese dicha conducta, ya que altera la normal convivencia y puede infringir las ordenanzas municipales sobre ruido y los estatutos de la comunidad.
+
+Prefiero resolver esto de manera amistosa. No obstante, si las molestias continúan, me veré obligado/a a comunicarlo a la comunidad de propietarios y a las autoridades competentes, así como a ejercer las acciones legales que procedan en defensa de mis derechos.
+
+Gracias por su comprensión.
+
+${val(v.fullName, "[Tu nombre completo]")}`;
+    },
+  },
+
+];
+
+/* ---------- Acceso por id ---------- */
+function caseById(id) {
+  return CASES.find((c) => c.id === id) || null;
+}
+
+function casesByCategory(catId) {
+  return CASES.filter((c) => c.category === catId);
+}
+
+
+// === data/knowledge.js ===
+/* ============================================================
+   knowledge.js — Base de conocimiento del asistente legal
+   (motor de coincidencia por palabras clave) y biblioteca de
+   derechos. Todo bilingüe ES/EN.
+   ============================================================ */
+
+/* Cada entrada: keywords (normalizadas, sin acentos), respuesta
+   bilingüe y, opcionalmente, el id de un caso recomendado. */
+const KB = [
+  {
+    keywords: ["multa", "trafico", "aparcamiento", "parking", "ticket", "estacionamiento", "dgt", "sancion"],
+    caseId: "multa-trafico",
+    answer: {
+      es: "Puedes **recurrir una multa** si hay defectos en la señalización, en la notificación o en los datos, o si tienes pruebas a tu favor. Ojo: el plazo para alegar suele ser de 15-20 días y pagar con descuento normalmente implica renunciar a recurrir.",
+      en: "You can **appeal a ticket** if there are defects in signage, the notice or the data, or if you have evidence in your favor. Note: the appeal window is usually 15-30 days, and paying the discounted fine usually waives your right to appeal.",
+    },
+  },
+  {
+    keywords: ["reembolso", "devolucion", "defectuoso", "roto", "refund", "faulty", "broken", "producto", "garantia legal"],
+    caseId: "reembolso-producto",
+    answer: {
+      es: "Si un producto es **defectuoso** o no es conforme, tienes derecho a su reparación, sustitución o reembolso. En la UE la garantía legal mínima es de 2 años. Guarda el ticket y reclama por escrito.",
+      en: "If a product is **faulty** or non-conforming, you're entitled to repair, replacement or refund. In the EU the minimum legal guarantee is 2 years. Keep the receipt and claim in writing.",
+    },
+  },
+  {
+    keywords: ["suscripcion", "cancelar", "membresia", "gimnasio", "streaming", "subscription", "cancel", "membership", "gym"],
+    caseId: "cancelar-suscripcion",
+    answer: {
+      es: "Para **cancelar una suscripción** debes notificarlo por escrito y revocar la autorización de cobro recurrente. Pide confirmación. Si te siguen cobrando, puedes pedir un contracargo al banco.",
+      en: "To **cancel a subscription**, notify in writing and revoke the recurring-charge authorization. Ask for confirmation. If charges continue, you can request a chargeback from your bank.",
+    },
+  },
+  {
+    keywords: ["fianza", "deposito", "alquiler", "casero", "arrendador", "deposit", "landlord", "rent", "security deposit"],
+    caseId: "deposito-alquiler",
+    answer: {
+      es: "El **depósito o fianza** debe devolverse al terminar el contrato, descontando solo daños reales (no el desgaste normal). Si no lo devuelven en plazo, puedes reclamarlo judicialmente con intereses.",
+      en: "Your **security deposit** must be returned at the end of the lease, deducting only real damage (not normal wear). If not returned on time, you can claim it in court with interest.",
+    },
+  },
+  {
+    keywords: ["reparacion", "humedad", "averia", "habitabilidad", "repairs", "mold", "heating", "boiler", "vivienda"],
+    caseId: "reparaciones-arrendador",
+    answer: {
+      es: "El **arrendador debe mantener la vivienda habitable** y hacer las reparaciones necesarias. Requiérelo por escrito dando un plazo; si no actúa, puedes reparar a su cargo, pedir rebaja de renta o resolver el contrato.",
+      en: "The **landlord must keep the home habitable** and carry out necessary repairs. Demand it in writing with a deadline; if ignored, you may repair-and-deduct, seek a rent reduction or terminate.",
+    },
+  },
+  {
+    keywords: ["vuelo", "avion", "retraso", "cancelado", "aerolinea", "flight", "delay", "cancelled", "airline", "261"],
+    caseId: "compensacion-vuelo",
+    answer: {
+      es: "Por un **vuelo retrasado (3h+), cancelado o con overbooking** puedes reclamar compensación. En la UE el Reglamento 261/2004 da hasta 600€ según la distancia, salvo circunstancias extraordinarias. Reclama a la aerolínea primero.",
+      en: "For a **delayed (3h+), cancelled or overbooked flight** you can claim compensation. In the EU, Regulation 261/2004 grants up to €600 by distance, barring extraordinary circumstances. Claim from the airline first.",
+    },
+  },
+  {
+    keywords: ["cargo", "tarjeta", "banco", "contracargo", "chargeback", "fraude", "card", "bank", "fraud", "duplicado"],
+    caseId: "contracargo-banco",
+    answer: {
+      es: "Ante un **cargo no reconocido, duplicado o por algo no recibido**, puedes disputarlo y pedir un contracargo a tu banco, normalmente dentro de 60-120 días. Si es fraude, pide además bloquear la tarjeta.",
+      en: "For an **unrecognized, duplicate or undelivered charge**, you can dispute it and request a chargeback from your bank, usually within 60-120 days. If it's fraud, also ask to block the card.",
+    },
+  },
+  {
+    keywords: ["deuda", "cobros", "recobro", "validacion", "debt", "collector", "collection", "fdcpa", "moroso", "asnef"],
+    caseId: "validacion-deuda",
+    answer: {
+      es: "No pagues una deuda dudosa sin más: puedes exigir su **validación** (contrato original, desglose, legitimación). Hasta que la prueben, pueden tener que cesar el cobro. No reconozcas la deuda por escrito.",
+      en: "Don't just pay a dubious debt: you can demand **validation** (original agreement, breakdown, standing). Until proven, they may have to stop collecting. Don't admit the debt in writing.",
+    },
+  },
+  {
+    keywords: ["credito", "informe", "scoring", "credit report", "score", "ficheros", "solvencia", "bureau"],
+    caseId: "disputa-credito",
+    answer: {
+      es: "Si hay un **error en tu informe de crédito** (deuda pagada, dato ajeno), tienes derecho a rectificarlo. El fichero debe investigar y corregir. Adjunta pruebas del pago o del error.",
+      en: "If there's an **error on your credit report** (paid debt, wrong entry), you have the right to fix it. The bureau must investigate and correct. Attach proof of payment or of the error.",
+    },
+  },
+  {
+    keywords: ["factura medica", "hospital", "medical bill", "clinica", "sanitaria", "copago"],
+    caseId: "factura-medica",
+    answer: {
+      es: "Ante una **factura médica** puedes pedir el desglose detallado, revisar duplicados y negociar un descuento o plan de pago. Mientras se revisa, pide que no apliquen recargos ni te envíen a cobros.",
+      en: "For a **medical bill** you can request an itemized statement, check for duplicates and negotiate a discount or payment plan. While under review, ask them not to add fees or send you to collections.",
+    },
+  },
+  {
+    keywords: ["datos", "acceso", "gdpr", "rgpd", "privacidad", "data", "access", "ccpa", "informacion personal"],
+    caseId: "acceso-datos",
+    answer: {
+      es: "Tienes **derecho de acceso** a saber qué datos tuyos tiene una empresa, para qué los usa y a quién se los cede (art. 15 RGPD). Deben responder gratis, normalmente en 1 mes.",
+      en: "You have a **right of access** to know what data a company holds, why and with whom it's shared (art. 15 GDPR). They must respond free of charge, usually within a month.",
+    },
+  },
+  {
+    keywords: ["borrar", "eliminar", "supresion", "olvido", "delete", "erasure", "forgotten", "baja datos"],
+    caseId: "supresion-datos",
+    answer: {
+      es: "El **derecho de supresión (al olvido)** te permite pedir que borren tus datos personales (art. 17 RGPD), con algunas excepciones legales. Pide confirmación del borrado y el cese de comunicaciones.",
+      en: "The **right to erasure (to be forgotten)** lets you request deletion of your personal data (art. 17 GDPR), with some legal exceptions. Ask for confirmation and that communications stop.",
+    },
+  },
+  {
+    keywords: ["salario", "nomina", "sueldo", "impagado", "horas extra", "wages", "salary", "unpaid", "finiquito", "trabajo"],
+    caseId: "salarios-impagados",
+    answer: {
+      es: "Si tu empresa **no paga el salario, horas extra o finiquito**, requiérelo por escrito con un plazo corto. Genera intereses por mora y puedes acudir a inspección de trabajo o al juzgado.",
+      en: "If your employer **doesn't pay wages, overtime or final settlement**, demand it in writing with a short deadline. It accrues interest and you can go to the labor authority or court.",
+    },
+  },
+  {
+    keywords: ["demanda", "demandar", "juicio", "small claims", "sue", "demand letter", "reclamacion previa", "pequenas cuantias"],
+    caseId: "demanda-previa",
+    answer: {
+      es: "Antes de demandar conviene (a veces es obligatorio) enviar una **reclamación previa**: resume los hechos, exige el pago o cumplimiento y da un plazo. Sirve de prueba de que intentaste un acuerdo.",
+      en: "Before suing it's advisable (sometimes required) to send a **letter before claim**: summarize the facts, demand payment or performance and set a deadline. It evidences you tried to settle.",
+    },
+  },
+  {
+    keywords: ["acoso", "difamacion", "cese", "desista", "cease", "desist", "amenaza", "harassment", "defamation"],
+    caseId: "cese-desista",
+    answer: {
+      es: "Una **carta de cese y desista** exige formalmente a alguien que detenga una conducta ilícita (acoso, difamación, uso indebido). No es una orden judicial, pero deja constancia y suele frenar la conducta.",
+      en: "A **cease-and-desist letter** formally demands someone stop unlawful conduct (harassment, defamation, misuse). It's not a court order, but it creates a record and often stops the behavior.",
+    },
+  },
+  {
+    keywords: ["contrato", "incumplimiento", "breach", "contract", "acuerdo", "clausula"],
+    caseId: "incumplimiento-contrato",
+    answer: {
+      es: "Ante un **incumplimiento de contrato** puedes exigir el cumplimiento, la resolución y/o una indemnización. Cita la cláusula incumplida, concreta el daño y da un plazo para subsanar.",
+      en: "On a **breach of contract** you can demand performance, termination and/or damages. Cite the breached clause, quantify the harm and set a deadline to cure.",
+    },
+  },
+  {
+    keywords: ["ruido", "vecino", "molestias", "noise", "neighbor", "nuisance", "comunidad"],
+    caseId: "ruido-vecinos",
+    answer: {
+      es: "Frente a **ruidos o molestias del vecindario**, documenta días y horas y envía un requerimiento formal. Si persiste, avisa a la comunidad o al ayuntamiento y, en último caso, denuncia.",
+      en: "For **neighbor noise or nuisance**, log dates and times and send a formal notice. If it persists, notify the association or city and, as a last resort, report it.",
+    },
+  },
+  {
+    keywords: ["garantia", "warranty", "fabricante", "averia producto"],
+    caseId: "garantia-producto",
+    answer: {
+      es: "La **garantía** obliga al fabricante o vendedor a reparar o sustituir un producto que falla dentro del periodo cubierto, sin coste. La garantía comercial nunca reduce la garantía legal mínima.",
+      en: "A **warranty** requires the maker or seller to repair or replace a product that fails within the covered period, at no cost. A commercial warranty never reduces the minimum legal guarantee.",
+    },
+  },
+  {
+    keywords: ["queja", "reclamacion", "complaint", "hoja de reclamaciones", "atencion al cliente"],
+    caseId: "queja-formal",
+    answer: {
+      es: "Una **queja formal** deja constancia de una mala experiencia y exige una solución concreta. Sé objetivo (hechos, fechas), pide un plazo de respuesta y guarda el acuse de recibo.",
+      en: "A **formal complaint** records a bad experience and demands a specific remedy. Be factual (events, dates), request a response deadline and keep proof of receipt.",
+    },
+  },
+];
+
+/* Respuesta por defecto cuando no hay coincidencia. */
+const FALLBACK = {
+  es: "No estoy seguro de haber entendido tu caso. Cuéntame con otras palabras (por ejemplo: «me cobraron de más», «no me devuelven la fianza», «mi vuelo se canceló») o explora todos los **casos disponibles** para encontrar el documento que necesitas.",
+  en: "I'm not sure I understood your case. Try other words (e.g. 'I was overcharged', 'they won't return my deposit', 'my flight was cancelled') or browse all **available cases** to find the document you need.",
+};
+
+/* Preguntas sugeridas para el asistente. */
+const SUGGESTIONS = {
+  es: ["Me cobraron de más en la tarjeta", "No me devuelven la fianza", "Mi vuelo se canceló", "Quiero cancelar una suscripción", "Tengo un producto defectuoso"],
+  en: ["I was overcharged on my card", "They won't return my deposit", "My flight was cancelled", "I want to cancel a subscription", "I have a faulty product"],
+};
+
+/* ---------- Biblioteca de derechos ---------- */
+const RIGHTS = [
+  {
+    icon: "🛒",
+    title: { es: "Derechos del consumidor", en: "Consumer rights" },
+    items: [
+      { q: { es: "¿Cuánto dura la garantía de un producto?", en: "How long does a product warranty last?" },
+        a: { es: "En la UE, la garantía legal mínima es de 2 años desde la entrega (3 años en algunos países). Cubre defectos de conformidad, no el mal uso. La garantía comercial es adicional y voluntaria.", en: "In the EU, the minimum legal guarantee is 2 years from delivery (3 in some countries). It covers conformity defects, not misuse. Commercial warranties are extra and voluntary." } },
+      { q: { es: "¿Puedo devolver una compra online?", en: "Can I return an online purchase?" },
+        a: { es: "En la UE tienes 14 días de desistimiento en compras a distancia, sin necesidad de justificar el motivo, con algunas excepciones (productos personalizados, perecederos, software desprecintado).", en: "In the EU you have a 14-day withdrawal right for distance purchases, without giving a reason, with some exceptions (custom, perishable, unsealed software)." } },
+      { q: { es: "¿Qué hago si una empresa no responde a mi reclamación?", en: "What if a company ignores my complaint?" },
+        a: { es: "Deja constancia por escrito, fija un plazo y, si no responden, escala a la autoridad de consumo, a una entidad de mediación o a la vía judicial (pequeñas cuantías).", en: "Keep it in writing, set a deadline and, if ignored, escalate to a consumer authority, mediation body or small-claims court." } },
+    ],
+  },
+  {
+    icon: "🏠",
+    title: { es: "Derechos del inquilino", en: "Tenant rights" },
+    items: [
+      { q: { es: "¿Pueden quedarse con mi fianza?", en: "Can they keep my deposit?" },
+        a: { es: "Solo pueden descontar daños reales más allá del desgaste normal y, en su caso, rentas o suministros impagados. Deben justificarlo; si no, procede la devolución íntegra.", en: "They can only deduct real damage beyond normal wear and any unpaid rent/utilities. They must justify it; otherwise the full deposit is due." } },
+      { q: { es: "¿Quién paga las reparaciones?", en: "Who pays for repairs?" },
+        a: { es: "Las reparaciones necesarias para conservar la vivienda habitable corresponden al arrendador; las pequeñas por uso ordinario, al inquilino. Los daños por mal uso los paga quien los causa.", en: "Repairs needed to keep the home habitable are the landlord's; minor wear-and-tear upkeep is the tenant's. Damage from misuse is paid by whoever caused it." } },
+      { q: { es: "¿Pueden subir el alquiler cuando quieran?", en: "Can rent be raised at will?" },
+        a: { es: "No. Las subidas se rigen por el contrato y la ley aplicable (a menudo ligadas a un índice y solo en la renovación). Revisa tu contrato y la normativa local.", en: "No. Increases follow the contract and applicable law (often tied to an index and only on renewal). Check your contract and local rules." } },
+    ],
+  },
+  {
+    icon: "💳",
+    title: { es: "Finanzas y deudas", en: "Finance & debt" },
+    items: [
+      { q: { es: "¿Una empresa de cobros puede acosarme?", en: "Can a debt collector harass me?" },
+        a: { es: "No. No pueden amenazar, llamar a horas intempestivas ni comunicar la deuda a terceros. Puedes exigir trato por escrito y la validación de la deuda antes de pagar.", en: "No. They can't threaten, call at unreasonable hours or disclose the debt to third parties. You can demand written contact and validation before paying." } },
+      { q: { es: "¿Qué es un contracargo?", en: "What is a chargeback?" },
+        a: { es: "Es la reversión de un cargo de tarjeta que solicitas a tu banco cuando es fraudulento, duplicado o por algo no recibido. Suele haber un plazo de 60-120 días desde el cargo.", en: "It's a reversal of a card charge you request from your bank for fraud, duplicates or undelivered goods. There's usually a 60-120 day window." } },
+    ],
+  },
+  {
+    icon: "🔒",
+    title: { es: "Privacidad y datos", en: "Privacy & data" },
+    items: [
+      { q: { es: "¿Qué derechos tengo sobre mis datos?", en: "What rights do I have over my data?" },
+        a: { es: "Acceso, rectificación, supresión, oposición, limitación y portabilidad (RGPD). Las empresas deben atenderlos gratis y normalmente en 1 mes. Puedes reclamar ante la autoridad de datos.", en: "Access, rectification, erasure, objection, restriction and portability (GDPR). Companies must handle them free of charge, usually within a month. You can complain to the data authority." } },
+      { q: { es: "¿Pueden enviarme publicidad sin permiso?", en: "Can they send me ads without consent?" },
+        a: { es: "El marketing suele requerir tu consentimiento o una relación previa, y siempre debe ofrecer una baja fácil. Puedes oponerte en cualquier momento.", en: "Marketing usually needs your consent or a prior relationship, and must always offer an easy opt-out. You can object at any time." } },
+    ],
+  },
+  {
+    icon: "💼",
+    title: { es: "Derechos laborales", en: "Worker rights" },
+    items: [
+      { q: { es: "¿Qué hago si no me pagan?", en: "What if I'm not paid?" },
+        a: { es: "Requiere el pago por escrito con un plazo. El impago genera intereses y puede dar lugar a denuncia ante la inspección de trabajo o a reclamación judicial, e incluso a la extinción indemnizada del contrato.", en: "Demand payment in writing with a deadline. Non-payment accrues interest and can lead to a labor complaint or court claim, even compensated termination." } },
+      { q: { es: "¿Tienen que pagarme las horas extra?", en: "Must overtime be paid?" },
+        a: { es: "Sí, las horas extra deben compensarse económicamente o con descanso según la ley y el convenio. Lleva un registro de tu jornada como prueba.", en: "Yes, overtime must be paid or compensated with rest per law and collective agreement. Keep a record of your hours as evidence." } },
+    ],
+  },
+  {
+    icon: "✈️",
+    title: { es: "Viajes y transporte", en: "Travel & transport" },
+    items: [
+      { q: { es: "¿Cuándo me deben compensar por un vuelo?", en: "When am I owed flight compensation?" },
+        a: { es: "En la UE: retraso de 3h o más en destino, cancelación sin aviso suficiente o denegación de embarque por overbooking, salvo circunstancias extraordinarias. La cuantía depende de la distancia (250-600€).", en: "In the EU: 3h+ arrival delay, cancellation without enough notice, or denied boarding due to overbooking, barring extraordinary circumstances. Amount depends on distance (€250-600)." } },
+      { q: { es: "¿Y si pierden mi equipaje?", en: "What if my luggage is lost?" },
+        a: { es: "Tienes derecho a indemnización conforme al Convenio de Montreal. Reclama de inmediato con el parte de irregularidad (PIR) y guarda los recibos de gastos de primera necesidad.", en: "You're entitled to compensation under the Montreal Convention. Claim immediately with the property irregularity report (PIR) and keep receipts for essentials." } },
+    ],
+  },
+];
+
+
+// === app.js ===
+/* ============================================================
+   app.js — Router SPA (hash-based) y renderizado de vistas.
+   ============================================================ */
+
+
+
+
+
+
+const view = document.getElementById("view");
+
+/* ---------- Estado del asistente (wizard) ---------- */
+const wizard = { caseId: null, step: 0, values: {} };
+
+/* ============================================================
+   ROUTER
+   ============================================================ */
+const routes = {
+  "": renderHome,
+  "/": renderHome,
+  "/casos": renderCases,
+  "/asistente": renderAssistant,
+  "/panel": renderDashboard,
+  "/derechos": renderRights,
+  "/aviso-legal": renderLegal,
+};
+
+function parseHash() {
+  const raw = location.hash.replace(/^#/, "") || "/";
+  const [path, query] = raw.split("?");
+  const params = new URLSearchParams(query || "");
+  return { path, params };
+}
+
+function router() {
+  const { path, params } = parseHash();
+
+  // Rutas dinámicas: /caso/:id  y  /documento/:id
+  if (path.startsWith("/caso/")) {
+    renderWizard(path.split("/")[2]);
+  } else if (path.startsWith("/documento/")) {
+    renderDocument(path.split("/")[2]);
+  } else {
+    const handler = routes[path] || renderNotFound;
+    handler(params);
+  }
+
+  // Marca enlace activo
+  document.querySelectorAll(".primary-nav a").forEach((a) => {
+    const href = a.getAttribute("href").replace(/^#/, "");
+    a.classList.toggle("active", href === path || (href === "/" && path === "/"));
+  });
+
+  // Cierra menú móvil y sube arriba
+  document.getElementById("primaryNav").classList.remove("open");
+  document.getElementById("navToggle").setAttribute("aria-expanded", "false");
+  window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+  document.getElementById("main").focus({ preventScroll: true });
+}
+
+function go(path) { location.hash = path; }
+
+/* ============================================================
+   INIT
+   ============================================================ */
+function init() {
+  document.documentElement.lang = getLang();
+  applyStaticTranslations();
+
+  // Menú móvil
+  const toggle = document.getElementById("navToggle");
+  toggle.addEventListener("click", () => {
+    const nav = document.getElementById("primaryNav");
+    const open = nav.classList.toggle("open");
+    toggle.setAttribute("aria-expanded", String(open));
+  });
+
+  // Cambio de idioma
+  document.querySelectorAll(".lang-btn").forEach((b) => {
+    b.addEventListener("click", () => setLang(b.dataset.lang));
+  });
+  document.addEventListener("langchange", () => router());
+
+  window.addEventListener("hashchange", router);
+  router();
+}
+
+document.addEventListener("DOMContentLoaded", init);
+
+/* ============================================================
+   HELPERS DE RENDER
+   ============================================================ */
+function pageHead(title, lead) {
+  return `<section class="page-head"><div class="container">
+    <h1>${esc(title)}</h1><p>${esc(lead)}</p>
+  </div></section>`;
+}
+
+function crumbs(items) {
+  return `<div class="crumbs">${items
+    .map((i, idx) => (i.href ? `<a href="${i.href}">${esc(i.label)}</a>` : `<span>${esc(i.label)}</span>`) + (idx < items.length - 1 ? " / " : ""))
+    .join("")}</div>`;
+}
+
+
+/* ============================================================
+   VISTA: HOME
+   ============================================================ */
+function renderHome() {
+  const popular = ["multa-trafico", "reembolso-producto", "deposito-alquiler", "compensacion-vuelo"]
+    .map(caseById).filter(Boolean);
+
+  view.innerHTML = `
+  <section class="hero">
+    <div class="container">
+      <div>
+        <span class="eyebrow">${esc(t("hero.eyebrow"))}</span>
+        <h1>${esc(t("hero.title"))}</h1>
+        <p class="lead">${esc(t("hero.lead"))}</p>
+        <div class="hero-actions">
+          <a class="btn btn-gold" href="#/casos">${esc(t("hero.cta1"))}</a>
+          <a class="btn btn-light" href="#/asistente">${esc(t("hero.cta2"))}</a>
+        </div>
+        <div class="hero-stats">
+          <div><div class="num">${CASES.length}</div><div class="lbl">${esc(t("hero.stat1"))}</div></div>
+          <div><div class="num">${CASES.length}+</div><div class="lbl">${esc(t("hero.stat2"))}</div></div>
+          <div><div class="num">100%</div><div class="lbl">${esc(t("hero.stat3"))}</div></div>
+        </div>
+      </div>
+      <div class="hero-card">
+        <form id="heroSearch" class="hero-search" role="search">
+          <input type="search" name="q" placeholder="${esc(t("hero.searchPlaceholder"))}" aria-label="${esc(t("hero.searchPlaceholder"))}" />
+          <button class="btn btn-primary" type="submit">${esc(t("hero.searchBtn"))}</button>
+        </form>
+        <div style="margin-top:14px;color:var(--slate-400);font-size:.85rem">${esc(t("hero.popular"))}</div>
+        <div class="hero-chips">
+          ${popular.map((c) => `<button class="chip" data-go="#/caso/${c.id}">${c.icon} ${esc(loc(c.title))}</button>`).join("")}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>${esc(t("home.catsTitle"))}</h2>
+        <p>${esc(t("home.catsLead"))}</p>
+      </div>
+      <div class="cat-grid">
+        ${CATEGORIES.map((cat) => {
+          const n = casesByCategory(cat.id).length;
+          return `<a class="cat-card" href="#/casos?cat=${cat.id}">
+            <div class="cat-icon">${cat.icon}</div>
+            <h3>${esc(loc(cat.name))}</h3>
+            <p>${n} ${n === 1 ? "caso" : "casos"}</p>
+            <span class="tag">${esc(t("cases.start"))} →</span>
+          </a>`;
+        }).join("")}
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="container">
+      <div class="section-head">
+        <h2>${esc(t("home.howTitle"))}</h2>
+        <p>${esc(t("home.howLead"))}</p>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="n">1</div><h3>${esc(t("home.step1Title"))}</h3><p class="muted">${esc(t("home.step1Desc"))}</p></div>
+        <div class="step"><div class="n">2</div><h3>${esc(t("home.step2Title"))}</h3><p class="muted">${esc(t("home.step2Desc"))}</p></div>
+        <div class="step"><div class="n">3</div><h3>${esc(t("home.step3Title"))}</h3><p class="muted">${esc(t("home.step3Desc"))}</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="card pad-lg" style="display:flex;gap:24px;align-items:center;flex-wrap:wrap;justify-content:space-between">
+        <div style="flex:1;min-width:260px">
+          <h2 style="margin-bottom:8px">🔒 ${esc(t("home.privacyTitle"))}</h2>
+          <p class="muted mb-0">${esc(t("home.privacyDesc"))}</p>
+        </div>
+        <a class="btn btn-primary" href="#/casos">${esc(t("home.startNow"))}</a>
+      </div>
+    </div>
+  </section>`;
+
+  // Eventos
+  view.querySelector("#heroSearch").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const q = new FormData(e.target).get("q") || "";
+    go(`/casos?q=${encodeURIComponent(q)}`);
+  });
+  view.querySelectorAll("[data-go]").forEach((el) =>
+    el.addEventListener("click", () => go(el.dataset.go.replace(/^#/, ""))));
+}
+
+/* ============================================================
+   VISTA: LISTADO DE CASOS
+   ============================================================ */
+function renderCases(params) {
+  const initialCat = params?.get("cat") || "all";
+  const initialQ = params?.get("q") || "";
+
+  view.innerHTML = `
+    ${pageHead(t("cases.title"), t("cases.lead"))}
+    <section class="section"><div class="container">
+      <div class="toolbar">
+        <input type="search" id="caseSearch" placeholder="${esc(t("cases.searchPlaceholder"))}" value="${esc(initialQ)}" />
+      </div>
+      <div class="filter-pills" id="catPills">
+        <button class="pill" data-cat="all">${esc(t("cases.all"))}</button>
+        ${CATEGORIES.map((c) => `<button class="pill" data-cat="${c.id}">${c.icon} ${esc(loc(c.name))}</button>`).join("")}
+      </div>
+      <div class="case-grid mt-3" id="caseGrid"></div>
+    </div></section>`;
+
+  let activeCat = initialCat;
+  const searchEl = view.querySelector("#caseSearch");
+  const gridEl = view.querySelector("#caseGrid");
+  const pills = view.querySelectorAll("#catPills .pill");
+
+  function paint() {
+    const q = normalize(searchEl.value);
+    pills.forEach((p) => p.classList.toggle("active", p.dataset.cat === activeCat));
+
+    const list = CASES.filter((c) => {
+      const inCat = activeCat === "all" || c.category === activeCat;
+      const hay = normalize(`${loc(c.title)} ${loc(c.desc)} ${loc(categoryById(c.category)?.name)}`);
+      const match = !q || hay.includes(q);
+      return inCat && match;
+    });
+
+    if (!list.length) {
+      gridEl.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="big">🔍</div><p>${esc(t("cases.none"))}</p></div>`;
+      return;
+    }
+
+    gridEl.innerHTML = list.map((c) => {
+      const cat = categoryById(c.category);
+      return `<div class="case-card">
+        <div class="top">
+          <div class="ci">${c.icon}</div>
+          <div><h3>${esc(loc(c.title))}</h3>
+          <span class="badge cat">${cat.icon} ${esc(loc(cat.name))}</span></div>
+        </div>
+        <p class="desc">${esc(loc(c.desc))}</p>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+          <span class="muted" style="font-size:.82rem">${Math.ceil(c.fields.length / 3)} ${esc(t("cases.steps"))}</span>
+          <a class="btn btn-primary btn-sm" href="#/caso/${c.id}">${esc(t("cases.start"))} →</a>
+        </div>
+      </div>`;
+    }).join("");
+  }
+
+  pills.forEach((p) => p.addEventListener("click", () => { activeCat = p.dataset.cat; paint(); }));
+  searchEl.addEventListener("input", paint);
+  paint();
+}
+
+
+/* ============================================================
+   VISTA: WIZARD (formulario guiado por pasos)
+   ============================================================ */
+const FIELDS_PER_STEP = 3;
+
+function stepsFor(caseDef) {
+  const chunks = [];
+  for (let i = 0; i < caseDef.fields.length; i += FIELDS_PER_STEP) {
+    chunks.push(caseDef.fields.slice(i, i + FIELDS_PER_STEP));
+  }
+  return chunks;
+}
+
+function fieldInput(f, value) {
+  const v = esc(value ?? "");
+  const ph = esc(loc(f.label));
+  if (f.type === "textarea") {
+    return `<textarea id="f_${f.name}" name="${f.name}" placeholder="${ph}">${v}</textarea>`;
+  }
+  if (f.type === "select") {
+    const opts = (f.options || []).map((o) =>
+      `<option value="${esc(o.value)}" ${value === o.value ? "selected" : ""}>${esc(loc(o.label))}</option>`).join("");
+    return `<select id="f_${f.name}" name="${f.name}"><option value="">—</option>${opts}</select>`;
+  }
+  const typeMap = { money: "text", number: "number", date: "date", email: "email", tel: "tel", text: "text" };
+  const inputType = typeMap[f.type] || "text";
+  return `<input id="f_${f.name}" name="${f.name}" type="${inputType}" value="${v}" placeholder="${ph}" ${f.type === "number" ? 'min="0"' : ""} />`;
+}
+
+function renderWizard(caseId) {
+  const def = caseById(caseId);
+  if (!def) return renderNotFound();
+
+  // Reinicia el estado si cambiamos de caso
+  if (wizard.caseId !== caseId) {
+    wizard.caseId = caseId;
+    wizard.step = 0;
+    wizard.values = {};
+  }
+
+  const steps = stepsFor(def);
+  const total = steps.length;
+  const cat = categoryById(def.category);
+  const stepFields = steps[wizard.step];
+  const pct = Math.round(((wizard.step) / total) * 100);
+  const isLast = wizard.step === total - 1;
+
+  view.innerHTML = `
+  <section class="section"><div class="container">
+    ${crumbs([{ label: t("nav.cases"), href: "#/casos" }, { label: loc(cat.name), href: `#/casos?cat=${cat.id}` }, { label: loc(def.title) }])}
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+      <div class="cat-icon">${def.icon}</div>
+      <div><h1 style="margin:0;font-size:1.6rem">${esc(loc(def.title))}</h1>
+      <p class="muted mb-0">${esc(loc(def.desc))}</p></div>
+    </div>
+
+    <div class="wizard-wrap">
+      <div class="card">
+        <div class="progress"><i style="width:${pct}%"></i></div>
+        <div class="step-label">${esc(t("wiz.step"))} ${wizard.step + 1} ${esc(t("wiz.of"))} ${total}</div>
+        <h3 style="margin-top:6px">${esc(loc(cat.name))}</h3>
+
+        ${def.juris ? `<div class="juris-note">⚖️ <strong>${esc(t("wiz.jurisHint"))}:</strong> ${esc(loc(def.juris))}</div>` : ""}
+
+        <form id="wizForm" novalidate>
+          ${stepFields.map((f) => `
+            <div class="field ${f.req ? "req" : ""}" data-field="${f.name}">
+              <label for="f_${f.name}">${esc(loc(f.label))}</label>
+              ${fieldInput(f, wizard.values[f.name])}
+              <div class="err">${esc(t("wiz.required"))}</div>
+            </div>`).join("")}
+
+          <div class="wizard-actions">
+            <button type="button" class="btn btn-ghost" id="btnBack">${wizard.step === 0 ? esc(t("wiz.startOver")) : "← " + esc(t("wiz.back"))}</button>
+            <button type="submit" class="btn btn-primary" id="btnNext">${isLast ? esc(t("wiz.generate")) + " →" : esc(t("wiz.next")) + " →"}</button>
+          </div>
+        </form>
+      </div>
+
+      <aside>
+        <div class="sidebar-note">
+          <h4>💡 ${esc(t("wiz.tipsTitle"))}</h4>
+          <ul>${(loc(def.tips) || []).map((tip) => `<li>${esc(tip)}</li>`).join("")}</ul>
+        </div>
+      </aside>
+    </div>
+  </div></section>`;
+
+  const form = view.querySelector("#wizForm");
+
+  function collect() {
+    new FormData(form).forEach((val, key) => { wizard.values[key] = String(val).trim(); });
+  }
+
+  function validate() {
+    let ok = true;
+    stepFields.forEach((f) => {
+      if (!f.req) return;
+      const wrap = view.querySelector(`[data-field="${f.name}"]`);
+      const el = view.querySelector(`#f_${f.name}`);
+      const empty = !String(el.value || "").trim();
+      wrap.classList.toggle("invalid", empty);
+      if (empty && ok) { el.focus(); ok = false; }
+      else if (empty) ok = false;
+    });
+    return ok;
+  }
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    collect();
+    if (!validate()) { toast(t("wiz.required"), "err"); return; }
+    if (isLast) {
+      generateDocument(def);
+    } else {
+      wizard.step++;
+      renderWizard(caseId);
+    }
+  });
+
+  view.querySelector("#btnBack").addEventListener("click", () => {
+    collect();
+    if (wizard.step === 0) {
+      wizard.values = {};
+      go("/casos");
+    } else {
+      wizard.step--;
+      renderWizard(caseId);
+    }
+  });
+}
+
+/* ============================================================
+   GENERACIÓN DE DOCUMENTO
+   ============================================================ */
+let currentDoc = null;
+
+function generateDocument(def) {
+  const lang = getLang();
+  const text = def.build(wizard.values, lang);
+  currentDoc = {
+    caseId: def.id,
+    title: loc(def.title),
+    icon: def.icon,
+    document: text,
+    values: { ...wizard.values },
+    nextSteps: loc(def.nextSteps) || [],
+    storeId: null,
+  };
+  go("/documento/preview");
+}
+
+/* ============================================================
+   VISTA: DOCUMENTO
+   ============================================================ */
+function renderDocument(id) {
+  let doc;
+  if (id === "preview" && currentDoc) {
+    doc = currentDoc;
+  } else {
+    const saved = getCase(id);
+    if (!saved) return renderNotFound();
+    const def = caseById(saved.caseType);
+    doc = {
+      caseId: saved.caseType,
+      title: saved.title,
+      icon: saved.icon,
+      document: saved.document,
+      values: saved.values,
+      nextSteps: def ? loc(def.nextSteps) || [] : [],
+      storeId: saved.id,
+    };
+    currentDoc = doc;
+  }
+
+  view.innerHTML = `
+  <section class="section"><div class="container">
+    ${crumbs([{ label: t("nav.cases"), href: "#/casos" }, { label: doc.title }])}
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:6px">
+      <div class="cat-icon">${doc.icon}</div>
+      <div><h1 style="margin:0;font-size:1.6rem">✅ ${esc(t("doc.title"))}</h1></div>
+    </div>
+    <p class="muted">${esc(t("doc.lead"))}</p>
+
+    <div class="doc-wrap mt-2">
+      <div>
+        <div class="doc-paper" id="docPaper" contenteditable="false">${esc(doc.document)}</div>
+      </div>
+      <div class="doc-actions">
+        <div class="card">
+          <button class="btn btn-primary btn-block" id="btnCopy">📋 ${esc(t("doc.copy"))}</button>
+          <button class="btn btn-ghost btn-block mt-2" id="btnDownload">⬇️ ${esc(t("doc.download"))}</button>
+          <button class="btn btn-ghost btn-block mt-2" id="btnPrint">🖨️ ${esc(t("doc.print"))}</button>
+          <button class="btn btn-ghost btn-block mt-2" id="btnEdit">✏️ ${esc(t("doc.edit"))}</button>
+          <hr style="border:none;border-top:1px solid var(--slate-200);margin:14px 0">
+          <button class="btn btn-gold btn-block" id="btnSave">💾 ${esc(t("doc.save"))}</button>
+        </div>
+        ${doc.nextSteps && doc.nextSteps.length ? `
+        <div class="sidebar-note">
+          <h4>📌 ${esc(t("doc.nextSteps"))}</h4>
+          <ul>${doc.nextSteps.map((s) => `<li>${esc(s)}</li>`).join("")}</ul>
+        </div>` : ""}
+      </div>
+    </div>
+  </div></section>`;
+
+  const paper = view.querySelector("#docPaper");
+
+  view.querySelector("#btnCopy").addEventListener("click", async () => {
+    const ok = await copyText(paper.innerText);
+    toast(ok ? t("doc.copied") : "Error", ok ? "ok" : "err");
+  });
+
+  view.querySelector("#btnDownload").addEventListener("click", () => {
+    downloadText(`${slug(doc.title)}.txt`, paper.innerText);
+  });
+
+  view.querySelector("#btnPrint").addEventListener("click", () => window.print());
+
+  view.querySelector("#btnEdit").addEventListener("click", (e) => {
+    const editing = paper.getAttribute("contenteditable") === "true";
+    paper.setAttribute("contenteditable", String(!editing));
+    e.currentTarget.classList.toggle("btn-primary", !editing);
+    e.currentTarget.classList.toggle("btn-ghost", editing);
+    if (!editing) { paper.focus(); toast(t("doc.editHint")); }
+    else { currentDoc.document = paper.innerText; }
+  });
+
+  view.querySelector("#btnSave").addEventListener("click", () => {
+    currentDoc.document = paper.innerText;
+    if (doc.storeId) {
+      updateCase(doc.storeId, { document: currentDoc.document });
+      toast(t("doc.saved"), "ok");
+    } else {
+      const rec = saveCase({
+        caseType: doc.caseId,
+        title: doc.title,
+        icon: doc.icon,
+        document: currentDoc.document,
+        values: doc.values,
+        status: "draft",
+      });
+      currentDoc.storeId = rec.id;
+      doc.storeId = rec.id;
+      toast(t("doc.savedCase"), "ok");
+    }
+  });
+}
+
+
+/* ============================================================
+   VISTA: PANEL / MIS CASOS
+   ============================================================ */
+const STATUS_LABELS = {
+  draft: { es: "Borrador", en: "Draft", dot: "s-draft" },
+  sent: { es: "Enviado", en: "Sent", dot: "s-sent" },
+  progress: { es: "En curso", en: "In progress", dot: "s-progress" },
+  resolved: { es: "Resuelto", en: "Resolved", dot: "s-resolved" },
+};
+
+function renderDashboard() {
+  const cases = getCases();
+  const s = stats();
+  const lang = getLang();
+
+  const statusOptions = (current) => STATUSES.map((st) =>
+    `<option value="${st}" ${current === st ? "selected" : ""}>${STATUS_LABELS[st][lang]}</option>`).join("");
+
+  view.innerHTML = `
+    ${pageHead(t("dash.title"), t("dash.lead"))}
+    <section class="section"><div class="container">
+      <div class="stat-row">
+        <div class="stat"><div class="v">${s.total}</div><div class="l">${esc(t("dash.total"))}</div></div>
+        <div class="stat draft"><div class="v">${s.draft}</div><div class="l">${esc(t("dash.draft"))}</div></div>
+        <div class="stat sent"><div class="v">${s.sent}</div><div class="l">${esc(t("dash.sent"))}</div></div>
+        <div class="stat resolved"><div class="v">${s.resolved}</div><div class="l">${esc(t("dash.resolved"))}</div></div>
+      </div>
+
+      ${cases.length ? `
+        <div style="display:flex;justify-content:flex-end;margin-bottom:14px">
+          <button class="btn btn-ghost btn-sm" id="btnExport">⬇️ ${esc(t("dash.export"))}</button>
+        </div>
+        <div id="caseList">
+          ${cases.map((c) => `
+            <div class="case-row" data-id="${c.id}">
+              <div class="ci">${c.icon}</div>
+              <div class="meta">
+                <h4>${esc(c.title)}</h4>
+                <div class="sub"><span class="status-dot ${STATUS_LABELS[c.status]?.dot || ""}"></span>${esc(t("dash.created"))}: ${esc(fmtDate(c.createdAt))}</div>
+              </div>
+              <select class="status-select" data-status="${c.id}" aria-label="${esc(t("dash.status"))}">${statusOptions(c.status)}</select>
+              <a class="btn btn-primary btn-sm" href="#/documento/${c.id}">${esc(t("dash.view"))}</a>
+              <button class="btn btn-ghost btn-sm" data-del="${c.id}">🗑️</button>
+            </div>`).join("")}
+        </div>
+      ` : `
+        <div class="empty">
+          <div class="big">📂</div>
+          <p>${esc(t("dash.empty"))}</p>
+          <a class="btn btn-primary" href="#/casos">${esc(t("dash.emptyCta"))}</a>
+        </div>`}
+    </div></section>`;
+
+  view.querySelectorAll("[data-status]").forEach((sel) =>
+    sel.addEventListener("change", () => {
+      updateCase(sel.dataset.status, { status: sel.value });
+      renderDashboard();
+    }));
+
+  view.querySelectorAll("[data-del]").forEach((btn) =>
+    btn.addEventListener("click", () => {
+      if (confirm(t("dash.confirmDelete"))) {
+        deleteCase(btn.dataset.del);
+        toast(t("dash.deleted"), "ok");
+        renderDashboard();
+      }
+    }));
+
+  const exp = view.querySelector("#btnExport");
+  if (exp) exp.addEventListener("click", () => downloadText("justiciabot-casos.json", exportJSON()));
+}
+
+/* ============================================================
+   VISTA: ASISTENTE (chatbot por palabras clave)
+   ============================================================ */
+function matchKB(input) {
+  const q = normalize(input);
+  let best = null, bestScore = 0;
+  for (const entry of KB) {
+    let score = 0;
+    for (const kw of entry.keywords) {
+      if (q.includes(normalize(kw))) score += kw.length; // favorece coincidencias largas
+    }
+    if (score > bestScore) { bestScore = score; best = entry; }
+  }
+  return bestScore > 0 ? best : null;
+}
+
+function renderAssistant() {
+  const lang = getLang();
+  view.innerHTML = `
+    ${pageHead(t("assist.title"), t("assist.lead"))}
+    <section class="section"><div class="container">
+      <div class="chat-wrap">
+        <div class="chat-box">
+          <div class="chat-log" id="chatLog" aria-live="polite"></div>
+          <div class="suggestions" id="suggestions">
+            ${SUGGESTIONS[lang].map((s) => `<button class="chip" style="color:var(--navy-700);border-color:var(--slate-300)" data-sug="${esc(s)}">${esc(s)}</button>`).join("")}
+          </div>
+          <form class="chat-input" id="chatForm">
+            <input type="text" id="chatInput" placeholder="${esc(t("assist.placeholder"))}" autocomplete="off" />
+            <button class="btn btn-primary" type="submit">${esc(t("assist.send"))}</button>
+          </form>
+        </div>
+        <aside>
+          <div class="sidebar-note">
+            <h4>📚 ${esc(t("assist.topicsTitle"))}</h4>
             <ul>
-                <li><a href="#">Inicio</a></li>
-                <li><a href="#">Noticias</a></li>
-                <li><a href="#">Contacto</a></li>
+              ${KB.slice(0, 8).map((k) => {
+                const c = caseById(k.caseId);
+                return c ? `<li><a href="#/caso/${c.id}">${c.icon} ${esc(loc(c.title))}</a></li>` : "";
+              }).join("")}
             </ul>
-        </nav>
-    </header>
+          </div>
+          <p class="muted" style="font-size:.8rem;margin-top:12px">⚠️ ${esc(t("assist.disclaimer"))}</p>
+        </aside>
+      </div>
+    </div></section>`;
 
-    <main>
-        <h2>Últimas noticias</h2>
-        <ul>
-            <li>
-                <h3>Título de la noticia 1</h3>
-                <p>Descripción breve de la noticia 1</p>
-                <a href="#">Leer más</a>
-            </li>
-            <li>
-                <h3>Título de la noticia 2</h3>
-                <p>Descripción breve de la noticia 2</p>
-                <a href="#">Leer más</a>
-            </li>
-            <li>
-                <h3>Título de la noticia 3</h3>
-                <p>Descripción breve de la noticia 3</p>
-                <a href="#">Leer más</a>
-            </li>
-        </ul>
-    </main>
+  const log = view.querySelector("#chatLog");
+  const form = view.querySelector("#chatForm");
+  const input = view.querySelector("#chatInput");
 
-    <footer>
-        <p>Derechos reservados 2023 - Mi sitio de noticias</p>
-    </footer>
+  function addMsg(htmlContent, who) {
+    const div = document.createElement("div");
+    div.className = `msg ${who}`;
+    div.innerHTML = htmlContent;
+    log.appendChild(div);
+    log.scrollTop = log.scrollHeight;
+  }
+
+  // Convierte **negrita** y enlaza al caso
+  function botReply(text) {
+    addMsg("…", "bot");
+    const placeholder = log.lastChild;
+    setTimeout(() => {
+      const match = matchKB(text);
+      let html;
+      if (match) {
+        const c = caseById(match.caseId);
+        html = mdBold(loc(match.answer));
+        if (c) html += `<span class="src"><a href="#/caso/${c.id}">${esc(t("assist.openCase"))}</a></span>`;
+      } else {
+        html = mdBold(loc(FALLBACK)) + `<span class="src"><a href="#/casos">${esc(t("nav.cases"))} →</a></span>`;
+      }
+      placeholder.innerHTML = html;
+      log.scrollTop = log.scrollHeight;
+    }, 350);
+  }
+
+  function send(text) {
+    const clean = text.trim();
+    if (!clean) return;
+    addMsg(esc(clean), "user");
+    botReply(clean);
+    input.value = "";
+  }
+
+  form.addEventListener("submit", (e) => { e.preventDefault(); send(input.value); });
+  view.querySelectorAll("[data-sug]").forEach((b) =>
+    b.addEventListener("click", () => send(b.dataset.sug)));
+
+  // Saludo inicial
+  addMsg(esc(t("assist.greeting")), "bot");
+}
+
+function mdBold(str) {
+  return esc(str).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+}
+
+/* ============================================================
+   VISTA: DERECHOS
+   ============================================================ */
+function renderRights() {
+  view.innerHTML = `
+    ${pageHead(t("rights.title"), t("rights.lead"))}
+    <section class="section"><div class="container">
+      <div class="article-grid">
+        ${RIGHTS.map((r) => `
+          <div class="article">
+            <h3>${r.icon} ${esc(loc(r.title))}</h3>
+            ${r.items.map((it) => `
+              <details>
+                <summary>${esc(loc(it.q))}</summary>
+                <p>${esc(loc(it.a))}</p>
+              </details>`).join("")}
+          </div>`).join("")}
+      </div>
+      <div class="card pad-lg mt-3 text-center">
+        <h3>${esc(t("hero.cta2"))}</h3>
+        <p class="muted">${esc(t("assist.lead"))}</p>
+        <a class="btn btn-primary" href="#/asistente">${esc(t("nav.assistant"))} →</a>
+      </div>
+    </div></section>`;
+}
+
+/* ============================================================
+   VISTA: AVISO LEGAL
+   ============================================================ */
+function renderLegal() {
+  const lang = getLang();
+  const content = lang === "en" ? {
+    title: "Legal notice & privacy",
+    body: `
+      <h2>Not legal advice</h2>
+      <p>JusticiaBot is a free, open educational tool that helps you understand common consumer situations and generate template documents. It is <strong>not a law firm</strong>, does not provide legal representation and does not create an attorney–client relationship. The generated documents are templates that you should review and adapt to your specific situation and jurisdiction. For important matters, consult a qualified lawyer.</p>
+      <h2>Jurisdiction</h2>
+      <p>Laws vary significantly by country, state and region. References to specific regulations (such as EU Regulation 261/2004 or the GDPR) are provided as general guidance and may not apply to your case. Always check the rules and deadlines that apply where you live.</p>
+      <h2>Privacy</h2>
+      <p>JusticiaBot runs entirely in your browser. The information you enter and the cases you save are stored locally on your device using <strong>localStorage</strong>. No data is sent to any server, and there is no tracking or analytics. If you clear your browser data, your saved cases will be deleted.</p>
+      <h2>No warranty</h2>
+      <p>The tool is provided "as is", without warranty of any kind. The authors are not liable for any outcome resulting from the use of the generated documents.</p>`,
+  } : {
+    title: "Aviso legal y privacidad",
+    body: `
+      <h2>No es asesoramiento jurídico</h2>
+      <p>JusticiaBot es una herramienta educativa gratuita y abierta que te ayuda a entender situaciones de consumo habituales y a generar documentos a partir de plantillas. <strong>No es un despacho de abogados</strong>, no presta representación legal y no crea una relación abogado–cliente. Los documentos generados son plantillas que debes revisar y adaptar a tu situación concreta y a tu jurisdicción. Para asuntos importantes, consulta a un abogado cualificado.</p>
+      <h2>Jurisdicción</h2>
+      <p>Las leyes varían mucho según el país, la comunidad y la región. Las referencias a normas concretas (como el Reglamento UE 261/2004 o el RGPD) son orientación general y pueden no aplicarse a tu caso. Comprueba siempre las normas y los plazos vigentes en tu lugar de residencia.</p>
+      <h2>Privacidad</h2>
+      <p>JusticiaBot funciona íntegramente en tu navegador. La información que introduces y los casos que guardas se almacenan localmente en tu dispositivo mediante <strong>localStorage</strong>. No se envía ningún dato a ningún servidor y no hay rastreo ni analítica. Si borras los datos de tu navegador, tus casos guardados se eliminarán.</p>
+      <h2>Sin garantía</h2>
+      <p>La herramienta se ofrece "tal cual", sin garantía de ningún tipo. Los autores no se responsabilizan del resultado derivado del uso de los documentos generados.</p>`,
+  };
+
+  view.innerHTML = `
+    ${pageHead(content.title, "")}
+    <section class="section"><div class="container">
+      <div class="prose">${content.body}</div>
+    </div></section>`;
+}
+
+/* ============================================================
+   VISTA: 404
+   ============================================================ */
+function renderNotFound() {
+  view.innerHTML = `
+    <section class="section"><div class="container">
+      <div class="empty">
+        <div class="big">🧭</div>
+        <h2>404</h2>
+        <p>${getLang() === "en" ? "Page not found." : "Página no encontrada."}</p>
+        <a class="btn btn-primary" href="#/">${esc(t("nav.home"))}</a>
+      </div>
+    </div></section>`;
+}
+
+
+})();
+  </script>
 </body>
 </html>
